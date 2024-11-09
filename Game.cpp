@@ -63,6 +63,7 @@ void Game::run()
         case Menu::SETTINGS:
             break;
         case Menu::LEVEL:
+            level.drawTo(window);
             break;
         case Menu::END:
             break;

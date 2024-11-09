@@ -22,6 +22,8 @@ public:
 	//draws all of the level's contents to the window
 	void drawTo(sf::RenderWindow&, bool = false);
 private:
+	sf::Texture bgImg;
+	sf::Sprite background;
 	Player player;
 };
 
