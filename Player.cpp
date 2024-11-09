@@ -9,20 +9,6 @@ Player::Player()
 }
 
 
-void Player::setVelAngle(double newAngle)
-{
-	angle = newAngle;
-	updateVelocity();
-}
-
-
-void Player::setVelMagnitude(double newMagnitude)
-{
-	magnitude = newMagnitude;
-	updateVelocity();
-}
-
-
 void Player::update(sf::RenderWindow& window)
 {
 	//spin function
@@ -32,7 +18,14 @@ void Player::update(sf::RenderWindow& window)
     d.x = mouseMap.x - hitbox.getPosition().x;
     d.y = mouseMap.y - hitbox.getPosition().y;
 
-    //were gonna need debug keys to switch modes until collectables are added
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+        currentMoveMode = MovementMode::SLIDE;
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::X))
+        currentMoveMode = MovementMode::WARP;
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+        currentMoveMode = MovementMode::TRAVEL;
+
     switch (currentMoveMode)
     {
     case MovementMode::SLIDE:
@@ -69,14 +62,13 @@ void Player::update(sf::RenderWindow& window)
         else
             theta = 3.14159 / 2;
         
-        setVelAngle(theta);
-        setVelMagnitude(10);
+        vel.x = 10 * cos(theta) * negative; //10 is speed, make this a constant later
+        vel.y = 10 * sin(theta) * negative;
+        initVel = vel;
         
         //runs out after timer probby
         //set back to slide
         hitbox.setPosition(hitbox.getPosition() + vel);
-        break;
-    default:
         break;
     }
 
@@ -90,6 +82,20 @@ void Player::update(sf::RenderWindow& window)
         mousePressed = true;
     else
         mousePressed = false;
+}
+
+
+void Player::setVelAngle(double newAngle)
+{
+	angle = newAngle;
+	updateVelocity();
+}
+
+
+void Player::setVelMagnitude(double newMagnitude)
+{
+	magnitude = newMagnitude;
+	updateVelocity();
 }
 
 
