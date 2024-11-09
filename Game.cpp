@@ -1,11 +1,13 @@
 #include "Game.h"
 #include <iostream>
 
+
 Game::Game()
 {
     window.create(sf::VideoMode(1280, 720), "Shipping People LOL");
     view = window.getDefaultView();
 }
+
 
 void Game::run()
 {
