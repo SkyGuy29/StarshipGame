@@ -27,21 +27,38 @@ void Player::update(sf::RenderWindow& window)
 {
 	//spin function
 
-    const int FRAMERATE = 60;
-
     sf::Vector2f mouseMap(window.mapPixelToCoords(sf::Mouse::getPosition(window))), d;
 
     d.x = mouseMap.x - hitbox.getPosition().x;
     d.y = mouseMap.y - hitbox.getPosition().y;
 
-    if (!mousePressed && sf::Mouse::isButtonPressed(sf::Mouse::Right))
+    //were gonna need debug keys to switch modes until collectables are added
+    switch (currentMoveMode)
     {
+    case MovementMode::SLIDE:
+        if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePressed)
+        {
+            vel.x = d.x / ((FRAMERATE + 1) / 2.f); //okay i dont like magic code but i actually do not know the explanation
+            vel.y = d.y / ((FRAMERATE + 1) / 2.f); //also everywhere else uses angle and magnitude but here it would make things too complicated
+
+            initVel = vel;
+            //glock.restart();
+        }
+        break;
+    case MovementMode::WARP:
+        if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePressed)
+        {
+            hitbox.setPosition(mouseMap);
+            //instantly warp player and have view catch up (fast, slide math for easing????????)
+            currentMoveMode = MovementMode::SLIDE;
+        }
+        break;
+    case MovementMode::TRAVEL:        
         float negative = 1; //needs to be a float in case of rounding issues
         double theta;
-
-
+        
         //std::cout << d.x << std::endl;
-
+        
         if (d.x != 0) //preventing division by 0
         {
             theta = atan(d.y / d.x);
@@ -51,41 +68,28 @@ void Player::update(sf::RenderWindow& window)
             theta = -3.14159 / 2;
         else
             theta = 3.14159 / 2;
-
-        vel.x = 10 * cos(theta) * negative; //10 is speed, make this a constant later
-        vel.y = 10 * sin(theta) * negative;
-
+        
+        setVelAngle(theta);
+        setVelMagnitude(10);
+        
+        //runs out after timer probby
+        //set back to slide
         hitbox.setPosition(hitbox.getPosition() + vel);
+        break;
+    default:
+        break;
     }
 
-    if (!mousePressed && sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    if (currentMoveMode != MovementMode::TRAVEL)
     {
-        vel.x = d.x / ((FRAMERATE + 1) / 2.f); //okay i dont like magic code but i actually do not know the explanation
-        vel.y = d.y / ((FRAMERATE + 1) / 2.f);
+        if (vel.x != 0 && vel.y != 0)
+            decelerate();
+    }
 
-        initVel = vel;
-        //glock.restart();
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
         mousePressed = true;
-    }
-
-    if (mousePressed)
-    {
-        if (abs(vel.x) >= abs(initVel.x) / FRAMERATE && abs(vel.y) >= abs(initVel.y) / FRAMERATE)
-        {
-            hitbox.setPosition(hitbox.getPosition() + vel);
-            vel.x -= initVel.x / FRAMERATE; //should take exactly one second to slide
-            vel.y -= initVel.y / FRAMERATE;
-
-
-        }
-        else
-        {
-            if (!sf::Mouse::isButtonPressed(sf::Mouse::Left))
-                mousePressed = false;
-            vel.x = vel.y = 0;
-            //std::cout << glock.getElapsedTime().asMilliseconds() << std::endl;
-        }
-    }
+    else
+        mousePressed = false;
 }
 
 
@@ -96,10 +100,28 @@ void Player::drawTo(sf::RenderWindow& window, bool showHitboxes)
 }
 
 
+void Player::decelerate()
+{
+    //if the next velocity change would result in it flipping signs, that means it is done running and should be set to 0
+    if (abs(vel.x) >= abs(initVel.x) / FRAMERATE && abs(vel.y) >= abs(initVel.y) / FRAMERATE)
+    {
+        hitbox.setPosition(hitbox.getPosition() + vel);
+        vel.x -= initVel.x / FRAMERATE; //should take exactly one second to slide
+        vel.y -= initVel.y / FRAMERATE;
+    }
+    else
+    {
+        vel.x = vel.y = 0;
+        //std::cout << glock.getElapsedTime().asMilliseconds() << std::endl;
+    }
+}
+
+
 void Player::updateVelocity()
 {
 	vel.x = magnitude * cos(angle); //negative?
 	vel.y = magnitude * sin(angle);
+    initVel = vel;
 }
 
 
