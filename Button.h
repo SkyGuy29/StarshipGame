@@ -6,7 +6,7 @@
 class Button
 {
 public:
-	Button(float);
+	Button(float = 100.f);
 	~Button() {};
 	//changes the current center of the button to a new position
 	void setPos(sf::Vector2f);
@@ -14,7 +14,7 @@ public:
 	void setString(std::string);
 	//returns true if the cursor is on the button and the mouse was just released
 	bool isActivated(sf::RenderWindow&);
-	//draws the botton to a given window
+	//draws the button to a given window
 	void drawTo(sf::RenderWindow&);
 private:
 	sf::CircleShape clickCirc;

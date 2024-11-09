@@ -13,7 +13,7 @@ public:
 	void setVelAngle(double);
 	void setVelMagnitude(double);
 	void update();
-	void drawTo(sf::RenderWindow&, bool);
+	void drawTo(sf::RenderWindow&, bool = false);
 private:
 	void updateVelocity();
 	double angle = 0, magnitude = 0;

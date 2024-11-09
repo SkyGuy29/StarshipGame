@@ -29,7 +29,7 @@ void Player::update()
 }
 
 
-void Player::drawTo(sf::RenderWindow& window, bool showHitboxes = false)
+void Player::drawTo(sf::RenderWindow& window, bool showHitboxes)
 {
 	window.draw(spinner);
 	window.draw(hitbox);

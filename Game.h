@@ -2,6 +2,16 @@
 #include "Level.h"
 
 
+enum class Menu
+{
+	START,
+	SELECT,
+	SETTINGS,
+	LEVEL,
+	END
+};
+
+
 class Game
 {
 public:
@@ -10,4 +20,5 @@ public:
 private:
 	sf::RenderWindow window;
 	sf::View view;
+	Menu currentMenu;
 };

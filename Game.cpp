@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Button.h"
 #include <iostream>
 
 
@@ -11,8 +12,10 @@ Game::Game()
 
 void Game::run()
 {
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    Button testButton;
+    
+    testButton.setPos(sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2));
+    testButton.setString("yay button");
 
     while (window.isOpen())
     {
@@ -23,8 +26,13 @@ void Game::run()
                 window.close();
         }
 
+        if (testButton.isActivated(window))
+        {
+            std::cout << "yay\n";
+        }
+
         window.clear();
-        window.draw(shape);
+        testButton.drawTo(window);
         window.display();
     }
 }
