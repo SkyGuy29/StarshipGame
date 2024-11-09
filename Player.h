@@ -22,5 +22,5 @@ private:
 	//sprite
 	sf::RectangleShape spinner; //placeholder sprite just to show that aiming works
 	sf::Vector2f vel, initVel;
-	bool mousePressed;
+	bool mousePressed = false;
 };
