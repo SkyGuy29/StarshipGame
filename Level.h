@@ -15,10 +15,13 @@ class Level
 public:
 	Level();
 	~Level() {};
+	//loads a given level from the id given and the corresponding text file.
 	void load(int);
+	//handles most of the actual level gameplay, updating all of the things going on inside of the level
 	ExitCondition update();
-	void drawTo(sf::RenderWindow&);
+	//draws all of the level's contents to the window
+	void drawTo(sf::RenderWindow&, bool = false);
 private:
-
+	Player player;
 };
 

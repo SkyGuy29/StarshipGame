@@ -19,7 +19,7 @@ ExitCondition Level::update()
 }
 
 
-void Level::drawTo(sf::RenderWindow& window)
+void Level::drawTo(sf::RenderWindow& window, bool showHitboxes)
 {
 
 }
