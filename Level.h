@@ -1,5 +1,5 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include "Player.h"
 
 
 enum class ExitCondition
@@ -14,8 +14,10 @@ class Level
 {
 public:
 	Level();
-	void load();
+	~Level() {};
+	void load(int);
 	ExitCondition update();
+	void drawTo(sf::RenderWindow&);
 private:
 
 };

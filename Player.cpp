@@ -1,31 +1,25 @@
 #include "Player.h"
 
+
 Player::Player()
 {
-}
-
-
-double Player::getVelAngle() const
-{
-	return 0.0;
-}
-
-
-double Player::getVelMagnitiude() const
-{
-	return 0.0;
+	hitbox.setFillColor(sf::Color::Cyan);
+	hitbox.setRadius(30.f);
+	hitbox.setOrigin(hitbox.getRadius(), hitbox.getRadius());
 }
 
 
 void Player::setVelAngle(double newAngle)
 {
-
+	angle = newAngle;
+	updateVelocity();
 }
 
 
 void Player::setVelMagnitude(double newMagnitude)
 {
-	
+	magnitude = newMagnitude;
+	updateVelocity();
 }
 
 
@@ -35,16 +29,12 @@ void Player::update()
 }
 
 
-sf::Vector2f Player::getPos()
+void Player::drawTo(sf::RenderWindow& window, bool showHitboxes = false)
 {
-	return sf::Vector2f();
+	window.draw(spinner);
+	window.draw(hitbox);
 }
 
-
-void Player::drawTo(sf::RenderWindow& window, bool showHitboxes)
-{
-
-}
 
 void Player::updateVelocity()
 {
