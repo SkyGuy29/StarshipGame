@@ -14,9 +14,10 @@ void Level::load(int levelNum)
 }
 
 
-ExitCondition Level::update()
+ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 {
-	player.update();
+	player.update(window);
+	view.setCenter(player.getPos());
 
 	return ExitCondition::NONE;
 }

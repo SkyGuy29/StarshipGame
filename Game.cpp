@@ -31,7 +31,7 @@ void Game::run()
         case Menu::START:
             if (testButton.isActivated(window))
             {
-                changeMenu(Menu::LEVEL);
+                changeMenu(Menu::LEVEL); //temporary until level select exists
             }
             break;
         case Menu::SELECT:
@@ -40,7 +40,7 @@ void Game::run()
         case Menu::SETTINGS:
             break;
         case Menu::LEVEL:
-            level.update();
+            level.update(window, view);
             //pause button and menu
             break;
         case Menu::END:
@@ -49,6 +49,7 @@ void Game::run()
             break;
         }
         
+        window.setView(view);
 
         window.clear();
 

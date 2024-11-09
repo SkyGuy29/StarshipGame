@@ -12,7 +12,7 @@ public:
 	sf::Vector2f getPos() const { return hitbox.getPosition(); };
 	void setVelAngle(double);
 	void setVelMagnitude(double);
-	void update();
+	void update(sf::RenderWindow&);
 	void drawTo(sf::RenderWindow&, bool = false);
 private:
 	void updateVelocity();
@@ -21,6 +21,6 @@ private:
 	sf::CircleShape hitbox;
 	//sprite
 	sf::RectangleShape spinner; //placeholder sprite just to show that aiming works
-	sf::Vector2f vel;
+	sf::Vector2f vel, initVel;
+	bool mousePressed;
 };
-
