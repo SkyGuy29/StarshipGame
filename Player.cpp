@@ -6,25 +6,46 @@ Player::Player()
 	hitbox.setFillColor(sf::Color::Cyan);
 	hitbox.setRadius(30.f);
 	hitbox.setOrigin(hitbox.getRadius(), hitbox.getRadius());
+    spinner.setSize(sf::Vector2f(50, 16));
+    spinner.setFillColor(sf::Color::Cyan);
+    spinner.setOrigin(0, 8);
 }
 
 
 void Player::update(sf::RenderWindow& window)
 {
-	//spin function
-
     sf::Vector2f mouseMap(window.mapPixelToCoords(sf::Mouse::getPosition(window))), d;
-
     d.x = mouseMap.x - hitbox.getPosition().x;
     d.y = mouseMap.y - hitbox.getPosition().y;
+    
+    //scope deletes flip at the end thats all lol
+    //aims the spinner at the cursor using math
+    {
+        sf::Vector2i flip;
+        if (d.x < 0)
+            flip.x = 180;
 
+        if (d.y < 0)
+            flip.y = 180;
+
+        if (d.x != 0)
+            spinner.setRotation(atan(d.y / d.x) * 180 / 3.14159 + flip.x);
+        else //preventing division by 0
+            spinner.setRotation(90 + flip.y);
+    }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+    {
         currentMoveMode = MovementMode::SLIDE;
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::X))
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
+    {
         currentMoveMode = MovementMode::WARP;
-    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+    {
         currentMoveMode = MovementMode::TRAVEL;
+    }
 
     switch (currentMoveMode)
     {
@@ -77,6 +98,8 @@ void Player::update(sf::RenderWindow& window)
         if (vel.x != 0 && vel.y != 0)
             decelerate();
     }
+
+    spinner.setPosition(hitbox.getPosition());
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
         mousePressed = true;
