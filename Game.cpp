@@ -16,8 +16,6 @@ Game::Game()
 
 void Game::run()
 {
-
-    //game loop begins here, once cycle is one frame
     while (window.isOpen())
     {
         sf::Event event;
@@ -27,7 +25,7 @@ void Game::run()
                 window.close();
         }
 
-
+        //updates based on the menu
         switch (currentMenu)
         {
         case Menu::START:
@@ -54,6 +52,7 @@ void Game::run()
 
         window.clear();
 
+        //draws based on the menu
         switch (currentMenu)
         {
         case Menu::START:
