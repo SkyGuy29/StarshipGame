@@ -14,9 +14,9 @@ Player::Player()
 
 void Player::update(sf::RenderWindow& window)
 {
-    sf::Vector2f mouseMap(window.mapPixelToCoords(sf::Mouse::getPosition(window))), d;
-    d.x = mouseMap.x - hitbox.getPosition().x;
-    d.y = mouseMap.y - hitbox.getPosition().y;
+    sf::Vector2f mouseMap(window.mapPixelToCoords(sf::Mouse::getPosition(window))), 
+        d = mouseMap - hitbox.getPosition();
+
     
     double theta; //angle between mouse and player, different than the angle member which is used for velocity
 

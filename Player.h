@@ -13,6 +13,7 @@ public:
 	double getVelAngle() const { return angle; };
 	double getVelMagnitiude() const { return magnitude; };
 	sf::Vector2f getPos() const { return hitbox.getPosition(); };
+	void addVel(sf::Vector2f add) { vel += add; };
 	void setVelAngle(double);
 	void setVelMagnitude(double);
 	void update(sf::RenderWindow&);
