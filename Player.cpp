@@ -51,9 +51,6 @@ void Player::update(sf::RenderWindow& window)
     }
 
     //changes movement based on the current mode
-    //yk now that i think about it warp should return to whatever the last mode was
-    //maybe make it a bool instead so you can warp while in travel
-
     if (slideMode)
     {
         if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePressed)

@@ -1,15 +1,13 @@
 #include "Game.h"
-#include "Level.h"
-#include "Button.h"
 #include <iostream>
 
 
 Game::Game()
 {
     window.create(sf::VideoMode(1280, 720), "Shipping People LOL");
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(FRAMERATE);
     view = window.getDefaultView();
-    testButton.setPos(sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2));
+    testButton.setPos(sf::Vector2f(window.getSize().x / 2.f, window.getSize().y / 2.f));
     testButton.setString("yay button");
 }
 
@@ -18,10 +16,10 @@ void Game::run()
 {
     while (window.isOpen())
     {
-        sf::Event event;
-        while (window.pollEvent(event))
+        sf::Event e;
+        while (window.pollEvent(e))
         {
-            if (event.type == sf::Event::Closed)
+            if (e.type == sf::Event::Closed)
                 window.close();
         }
 
@@ -93,7 +91,7 @@ void Game::changeMenu(Menu newMenu)
         break;
     case Menu::LEVEL:
         level.load(currentLevel);
-        level.update(window, view);
+        level.update(window, view); //remove this and youll see what it does
         break;
     case Menu::END:
         //load the congratulations text, credits, thanks for playing, and a way to exit

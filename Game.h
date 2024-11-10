@@ -20,11 +20,12 @@ public:
 	void run();
 private:
 	void changeMenu(Menu);
+
+	int currentLevel = 1;
+
 	Level level;
 	sf::RenderWindow window;
 	sf::View view;
 	Menu currentMenu = Menu::START; //do not change without the function
-	int currentLevel = 1;
-
 	Button testButton; //needs to be a vector eventually
 };

@@ -17,9 +17,10 @@ public:
 	//draws the button to a given window
 	void drawTo(sf::RenderWindow&);
 private:
+	bool mousePressed = false;
+
 	sf::CircleShape clickCirc;
 	sf::Font pusab;
 	sf::Text text; //placeholder until sprites become a thing
-	bool mousePressed = false;
 };
 

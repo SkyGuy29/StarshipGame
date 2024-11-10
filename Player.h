@@ -2,6 +2,9 @@
 #include <SFML/Graphics.hpp>
 
 
+const int FRAMERATE = 60;
+
+
 class Player
 {
 public:
@@ -17,13 +20,14 @@ public:
 private:
 	void decelerate();
 	void updateVelocity();
+
+	bool mousePressed = false, warpActive = false, slideMode = true;
 	double angle = 0, magnitude = 0;
+
 	//hitbox
 	sf::CircleShape hitbox;
 	//sprite
 	sf::RectangleShape spinner; //placeholder sprite just to show that aiming works
 	sf::Vector2f vel, initVel;
 	sf::Clock travelTimer;
-	bool mousePressed = false, warpActive = false, slideMode = true;
-	const int FRAMERATE = 60;
 };
