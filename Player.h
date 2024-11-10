@@ -2,14 +2,6 @@
 #include <SFML/Graphics.hpp>
 
 
-enum class MovementMode
-{
-	SLIDE,
-	WARP,
-	TRAVEL
-};
-
-
 class Player
 {
 public:
@@ -31,7 +23,7 @@ private:
 	//sprite
 	sf::RectangleShape spinner; //placeholder sprite just to show that aiming works
 	sf::Vector2f vel, initVel;
-	MovementMode currentMoveMode = MovementMode::SLIDE;
-	bool mousePressed = false;
+	sf::Clock travelTimer;
+	bool mousePressed = false, warpActive = false, slideMode = true;
 	const int FRAMERATE = 60;
 };

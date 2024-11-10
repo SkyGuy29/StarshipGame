@@ -93,6 +93,7 @@ void Game::changeMenu(Menu newMenu)
         break;
     case Menu::LEVEL:
         level.load(currentLevel);
+        level.update(window, view);
         break;
     case Menu::END:
         //load the congratulations text, credits, thanks for playing, and a way to exit

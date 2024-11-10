@@ -18,89 +18,90 @@ void Player::update(sf::RenderWindow& window)
     d.x = mouseMap.x - hitbox.getPosition().x;
     d.y = mouseMap.y - hitbox.getPosition().y;
     
-    //scope deletes flip at the end thats all lol
-    //aims the spinner at the cursor using math
+    double theta; //angle between mouse and player, different than the angle member which is used for velocity
+
+    if (d.x != 0) //preventing division by 0
     {
-        sf::Vector2i flip;
-        if (d.x < 0)
-            flip.x = 180;
+        theta = atan(d.y / d.x);
 
-        if (d.y < 0)
-            flip.y = 180;
-
-        if (d.x != 0)
-            spinner.setRotation(atan(d.y / d.x) * 180 / 3.14159 + flip.x);
-        else //preventing division by 0
-            spinner.setRotation(90 + flip.y);
+        if (d.x < 0) //if its negative...
+            theta += 3.14159; //add pi to get the angles past the range of atan() (> pi/2)
     }
+    else if (d.y < 0) //mouse ABOVE player
+        theta = -3.14159 / 2;
+    else
+        theta = 3.14159 / 2;
 
+    //aims the spinner at the cursor using math
+    spinner.setRotation(theta * 180 / 3.14159); //convert to degrees lol
+
+    //debug keys, will be removed when colectibles are added
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
     {
-        currentMoveMode = MovementMode::SLIDE;
+        slideMode = true;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
     {
-        currentMoveMode = MovementMode::WARP;
+        slideMode = false;
+        travelTimer.restart();
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
     {
-        currentMoveMode = MovementMode::TRAVEL;
+        warpActive = true;
     }
 
-    switch (currentMoveMode)
+    //changes movement based on the current mode
+    //yk now that i think about it warp should return to whatever the last mode was
+    //maybe make it a bool instead so you can warp while in travel
+
+    if (slideMode)
     {
-    case MovementMode::SLIDE:
         if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePressed)
         {
-            vel.x = d.x / ((FRAMERATE + 1) / 2.f); //okay i dont like magic code but i actually do not know the explanation
-            vel.y = d.y / ((FRAMERATE + 1) / 2.f); //also everywhere else uses angle and magnitude but here it would make things too complicated
-
-            initVel = vel;
-            //glock.restart();
+            if (warpActive)
+            {
+                hitbox.setPosition(mouseMap);
+                //instantly warp player and have view catch up (fast, slide math for easing????????)
+                warpActive = false;
+            }
+            else
+            {
+                vel.x = d.x / ((FRAMERATE + 1) / 2.f); //okay i dont like magic code but i actually do not know the explanation
+                vel.y = d.y / ((FRAMERATE + 1) / 2.f); //also this is the only case where it makes more sense to directly set vel than use angle and magnitude
+                initVel = vel;
+            }
         }
-        break;
-    case MovementMode::WARP:
-        if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePressed)
+    }
+    else
+    {
+        angle = theta;
+        magnitude = 10;
+        updateVelocity();
+
+        if (warpActive && !sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePressed)
         {
             hitbox.setPosition(mouseMap);
             //instantly warp player and have view catch up (fast, slide math for easing????????)
-            currentMoveMode = MovementMode::SLIDE;
+            warpActive = false;
         }
-        break;
-    case MovementMode::TRAVEL:        
-        float negative = 1; //needs to be a float in case of rounding issues
-        double theta;
-        
-        //std::cout << d.x << std::endl;
-        
-        if (d.x != 0) //preventing division by 0
+
+        if (travelTimer.getElapsedTime().asMilliseconds() >= 2000)
         {
-            theta = atan(d.y / d.x);
-            negative = d.x / abs(d.x); //should be just 1 or -1
+            slideMode = true;
         }
-        else if (d.y < 0) //mouse ABOVE player
-            theta = -3.14159 / 2;
-        else
-            theta = 3.14159 / 2;
-        
-        vel.x = 10 * cos(theta) * negative; //10 is speed, make this a constant later
-        vel.y = 10 * sin(theta) * negative;
-        initVel = vel;
-        
-        //runs out after timer probby
-        //set back to slide
-        hitbox.setPosition(hitbox.getPosition() + vel);
-        break;
     }
 
-    if (currentMoveMode != MovementMode::TRAVEL)
+    //moves the player if it has velocity
+    if (vel.x != 0 && vel.y != 0)
     {
-        if (vel.x != 0 && vel.y != 0)
+        hitbox.setPosition(hitbox.getPosition() + vel);
+        if (slideMode)
             decelerate();
     }
 
     spinner.setPosition(hitbox.getPosition());
 
+    //used for checking when a release has happened
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
         mousePressed = true;
     else
@@ -134,15 +135,11 @@ void Player::decelerate()
     //if the next velocity change would result in it flipping signs, that means it is done running and should be set to 0
     if (abs(vel.x) >= abs(initVel.x) / FRAMERATE && abs(vel.y) >= abs(initVel.y) / FRAMERATE)
     {
-        hitbox.setPosition(hitbox.getPosition() + vel);
         vel.x -= initVel.x / FRAMERATE; //should take exactly one second to slide
         vel.y -= initVel.y / FRAMERATE;
     }
     else
-    {
         vel.x = vel.y = 0;
-        //std::cout << glock.getElapsedTime().asMilliseconds() << std::endl;
-    }
 }
 
 
@@ -152,123 +149,3 @@ void Player::updateVelocity()
 	vel.y = magnitude * sin(angle);
     initVel = vel;
 }
-
-
-
-
-
-
-
-/*
-sf::RenderWindow window(sf::VideoMode(1280, 720), "Starship game thingy perchance lol");
-    sf::CircleShape player(20.f), cursorCirc(10.f);
-    sf::Vector2f vel, initVel;
-    sf::View view(window.getView());
-    sf::Texture image;
-    sf::Sprite background;
-    //sf::Clock glock;
-
-    MovementMode moveMode = MovementMode::SLIDE;
-
-    bool mousePressed = false;
-    float fadeCounter = 255;
-
-    image.loadFromFile("the q.jpg");
-    background.setTexture(image);
-    background.setScale(5, 5);
-
-    player.setFillColor(sf::Color::Cyan);
-    player.setOrigin(player.getRadius(), player.getRadius());
-    player.setPosition(window.getSize().x / 2, window.getSize().y / 2);
-    cursorCirc.setOrigin(cursorCirc.getRadius(), cursorCirc.getRadius());
-    cursorCirc.setPosition(player.getPosition());
-    cursorCirc.setFillColor(sf::Color::Transparent);
-    window.setFramerateLimit(FRAMERATE);
-
-    while (window.isOpen())
-    {
-        sf::Event e;
-        while (window.pollEvent(e))
-        {
-            if (e.type == sf::Event::Closed)
-                window.close();
-        }
-
-        sf::Vector2f mouseMap(window.mapPixelToCoords(sf::Mouse::getPosition(window))), d;
-
-        d.x = mouseMap.x - player.getPosition().x;
-        d.y = mouseMap.y - player.getPosition().y;
-
-        if (!mousePressed && sf::Mouse::isButtonPressed(sf::Mouse::Right))
-        {
-            float negative = 1; //needs to be a float in case of rounding issues
-            double theta;
-
-
-            //std::cout << d.x << std::endl;
-
-            if (d.x != 0) //preventing division by 0
-            {
-                theta = atan(d.y / d.x);
-                negative = d.x / abs(d.x); //should be just 1 or -1
-            }
-            else if (d.y < 0) //mouse ABOVE player
-                theta = -3.14159 / 2;
-            else
-                theta = 3.14159 / 2;
-
-            vel.x = 10 * cos(theta) * negative; //10 is speed, make this a constant later
-            vel.y = 10 * sin(theta) * negative;
-
-            player.setPosition(player.getPosition() + vel);
-            view.setCenter(player.getPosition());
-        }
-
-        if (!mousePressed && sf::Mouse::isButtonPressed(sf::Mouse::Left))
-        {
-            vel.x = d.x / ((FRAMERATE + 1) / 2.f); //okay i dont like magic code but i actually do not know the explanation
-            vel.y = d.y / ((FRAMERATE + 1) / 2.f);
-
-            initVel = vel;
-            cursorCirc.setPosition(mouseMap);
-            fadeCounter = 255;
-            //glock.restart();
-            mousePressed = true;
-        }
-
-        if (mousePressed)
-        {
-            if (abs(vel.x) >= abs(initVel.x) / FRAMERATE && abs(vel.y) >= abs(initVel.y) / FRAMERATE)
-            {
-                player.setPosition(player.getPosition() + vel);
-                view.setCenter(player.getPosition());
-                vel.x -= initVel.x / FRAMERATE; //should take exactly one second to slide
-                vel.y -= initVel.y / FRAMERATE;
-
-                cursorCirc.setFillColor(sf::Color(255, 0, 0, fadeCounter));
-
-                if (fadeCounter > 0)
-                    fadeCounter -= 255.f / FRAMERATE * 4;
-                else
-                    fadeCounter = 0;
-            }
-            else
-            {
-                if (!sf::Mouse::isButtonPressed(sf::Mouse::Left))
-                    mousePressed = false;
-                vel.x = vel.y = 0;
-                //std::cout << glock.getElapsedTime().asMilliseconds() << std::endl;
-            }
-        }
-
-        window.setView(view);
-
-        window.clear();
-        window.draw(background);
-        window.draw(player);
-        window.draw(cursorCirc);
-        window.display();
-    }
-
-    return 0;
-*/
