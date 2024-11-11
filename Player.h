@@ -1,5 +1,5 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include "Wall.h"
 
 
 const int FRAMERATE = 60;
@@ -17,10 +17,19 @@ public:
 	void setVelAngle(double);
 	void setVelMagnitude(double);
 	void update(sf::RenderWindow&);
+	bool isTouching(Wall);
+	/*
+	bool isTouching(Wormhole);
+	bool isTouching(Collectible));
+	bool isTouching(BouncePad);
+	bool isTouching(Booster);
+	*/
 	void drawTo(sf::RenderWindow&, bool = false);
 private:
 	void decelerate();
 	void updateVelocity();
+	float length(sf::Vector2f, sf::Vector2f);
+
 
 	bool mousePressed = false, warpActive = false, slideMode = true;
 	double angle = 0, magnitude = 0;

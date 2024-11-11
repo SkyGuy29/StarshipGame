@@ -106,6 +106,35 @@ void Player::update(sf::RenderWindow& window)
 }
 
 
+bool Player::isTouching(Wall wall)
+{
+    float sideLength[3];
+
+    for(int i = 0; i < wall.getWallCount; i++)
+    {
+        sideLength[0] = length(wall.getPoint(i), wall.getPoint(i + 1)); //a
+        sideLength[1] = length(hitbox.getPosition(), wall.getPoint(i)); //b
+        sideLength[2] = length(hitbox.getPosition(), wall.getPoint(i + 1)); //c
+
+        /* law of cosines to find angle
+	    the law in question: angle = acos((a*a + b*b - c*c) / (2ab))
+	    find distance away by then doing (b * sin(angle)) 
+        if the distance away from the line is less than the radius return true else false */
+        return sides[1] * sin(acos((sides[0] * sides[0] 
+		+ sides[1] * sides[1] - sides[2] * sides[2]) 
+		/ (2 * sides[0] * sides[1]))) < hitbox.getRadius();
+    }
+}
+
+
+float PLayer::length(sf::Vector2f point1, sf::Vector2f point2)
+{
+    sf::Vector2f d;
+    d = point1 - point2; //this just makes my life easier
+    return hypotf(d.x, d.y);
+}
+
+
 void Player::setVelAngle(double newAngle)
 {
 	angle = newAngle;
