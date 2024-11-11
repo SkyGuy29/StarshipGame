@@ -110,7 +110,9 @@ bool Player::isTouching(Wall wall)
 {
     float sideLength[3];
 
-    for(int i = 0; i < wall.getWallCount; i++)
+    //hey, careful there mister! if the velocity magnitude is greater than the radius the player may just skip over the line!
+    //and you forgot point collision lol
+    for(int i = 0; i < wall.getWallCount(); i++)
     {
         sideLength[0] = length(wall.getPoint(i), wall.getPoint(i + 1)); //a
         sideLength[1] = length(hitbox.getPosition(), wall.getPoint(i)); //b
@@ -120,18 +122,13 @@ bool Player::isTouching(Wall wall)
 	    the law in question: angle = acos((a*a + b*b - c*c) / (2ab))
 	    find distance away by then doing (b * sin(angle)) 
         if the distance away from the line is less than the radius return true else false */
-        return sides[1] * sin(acos((sides[0] * sides[0] 
-		+ sides[1] * sides[1] - sides[2] * sides[2]) 
-		/ (2 * sides[0] * sides[1]))) < hitbox.getRadius();
+        if (sideLength[1] * sin(acos((sideLength[0] * sideLength[0] 
+		+ sideLength[1] * sideLength[1] - sideLength[2] * sideLength[2]) 
+		/ (2 * sideLength[0] * sideLength[1]))) < hitbox.getRadius())
+            return true;
     }
-}
 
-
-float PLayer::length(sf::Vector2f point1, sf::Vector2f point2)
-{
-    sf::Vector2f d;
-    d = point1 - point2; //this just makes my life easier
-    return hypotf(d.x, d.y);
+    return false;
 }
 
 
@@ -174,4 +171,12 @@ void Player::updateVelocity()
 	vel.x = magnitude * cos(angle); //negative?
 	vel.y = magnitude * sin(angle);
     initVel = vel;
+}
+
+
+float Player::length(sf::Vector2f point1, sf::Vector2f point2)
+{
+    sf::Vector2f d;
+    d = point1 - point2; //this just makes my life easier
+    return hypotf(d.x, d.y);
 }
