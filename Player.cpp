@@ -108,7 +108,7 @@ void Player::update(sf::RenderWindow& window)
 
 bool Player::isTouching(Wall wall)
 {
-    float sideLength[3];
+    float sideLength[3], angle;
 
     //hey, careful there mister! if the velocity magnitude is greater than the radius the player may just skip over the line!
     //and you forgot point collision lol
@@ -122,9 +122,12 @@ bool Player::isTouching(Wall wall)
 	    the law in question: angle = acos((a*a + b*b - c*c) / (2ab))
 	    find distance away by then doing (b * sin(angle)) 
         if the distance away from the line is less than the radius return true else false */
-        if (sideLength[1] * sin(acos((sideLength[0] * sideLength[0] 
-		+ sideLength[1] * sideLength[1] - sideLength[2] * sideLength[2]) 
-		/ (2 * sideLength[0] * sideLength[1]))) < hitbox.getRadius())
+        angle = sideLength[1] * sin(acos((sideLength[0] * sideLength[0]
+            + sideLength[1] * sideLength[1] - sideLength[2] * sideLength[2])
+            / (2 * sideLength[0] * sideLength[1])));
+
+        //law of sines to find other angle, to check if the circle is past the wall and no longer needs to be checked
+        if (angle + asin(sin(angle) * sideLength[2] / sideLength[1]) <= 90 && angle < hitbox.getRadius())
             return true;
     }
 

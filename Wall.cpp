@@ -28,7 +28,7 @@ void Wall::drawTo(sf::RenderWindow& window)
 {
     for (int i = 0; i < point.size(); i++)
     {
-        sf::Vector2f d = point.at(i + 1) - point.at(i);
+        sf::Vector2f d = getPoint(i + 1) - getPoint(i);
         double theta; //yes the whole theta thing is copied from Player::update() read the comments there
 
         if (d.x != 0)
@@ -45,7 +45,7 @@ void Wall::drawTo(sf::RenderWindow& window)
 
 
         //setting the line to the two points 
-        line.setPosition(point.at(i));
+        line.setPosition(getPoint(i));
         line.setSize(sf::Vector2f(hypotf(d.x, d.y), 2)); //line length equals the distance between points
         line.setRotation(theta * 180 / 3.14159); //convert to degrees and rotates
         window.draw(line);

@@ -4,6 +4,7 @@
 #include <string>
 #include <math.h>
 #include <fstream>
+#include <iostream>
 
 
 class Wall 

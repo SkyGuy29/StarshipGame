@@ -25,5 +25,6 @@ private:
 	sf::Texture bgImg;
 	sf::Sprite background;
 	Player player;
+	Wall wall; //should be vector later
 };
 
