@@ -108,27 +108,33 @@ void Player::update(sf::RenderWindow& window)
 
 bool Player::isTouching(Wall wall)
 {
-    float sideLength[3], angle;
+    double a, b, c, C;
 
     //hey, careful there mister! if the velocity magnitude is greater than the radius the player may just skip over the line!
     //and you forgot point collision lol
-    for(int i = 0; i < wall.getWallCount(); i++)
+    for (int i = 0; i < wall.getWallCount(); i++)
     {
-        sideLength[0] = length(wall.getPoint(i), wall.getPoint(i + 1)); //a
-        sideLength[1] = length(hitbox.getPosition(), wall.getPoint(i)); //b
-        sideLength[2] = length(hitbox.getPosition(), wall.getPoint(i + 1)); //c
+        a = length(wall.getPoint(i), wall.getPoint(i + 1)); //a
+        b = length(hitbox.getPosition(), wall.getPoint(i)); //b
+        c = length(hitbox.getPosition(), wall.getPoint(i + 1)); //c
 
         /* law of cosines to find angle
-	    the law in question: angle = acos((a*a + b*b - c*c) / (2ab))
-	    find distance away by then doing (b * sin(angle)) 
-        if the distance away from the line is less than the radius return true else false */
-        angle = sideLength[1] * sin(acos((sideLength[0] * sideLength[0]
-            + sideLength[1] * sideLength[1] - sideLength[2] * sideLength[2])
-            / (2 * sideLength[0] * sideLength[1])));
+        the law in question: angle = acos((a*a + b*b - c*c) / (2ab))
+        find distance away by then doing (b * sin(angle))
+        compare distance to readius of the circle */
+        C = acos((a * a + b * b - c * c) / (2 * a * b));
 
-        //law of sines to find other angle, to check if the circle is past the wall and no longer needs to be checked
-        if (angle + asin(sin(angle) * sideLength[2] / sideLength[1]) <= 90 && angle < hitbox.getRadius())
-            return true;
+        if (C <= 3.14159 / 2)
+        {
+            //law of sines to find other angle, to check if the circle is past the wall and no longer needs to be checked
+            if (asin(sin(C) * b / c) <= 3.14159 / 2)
+            {
+                if (i == 0)
+                    std::cout << C * 180 / 3.14159 << " " << asin(sin(C) * b / c) * 180 / 3.14159 << " " << i << '\n';
+                if (b * sin(C) < hitbox.getRadius())
+                    return true;
+            }
+        }
     }
 
     return false;

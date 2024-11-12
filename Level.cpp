@@ -20,7 +20,7 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 	player.update(window);
 	if (player.isTouching(wall))
 	{
-		std::cout << "hi";
+		std::cout << "hi ";
 	}
 	view.setCenter(player.getPos());
 
