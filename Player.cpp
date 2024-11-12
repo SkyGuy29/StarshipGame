@@ -108,7 +108,7 @@ void Player::update(sf::RenderWindow& window)
 
 bool Player::isTouching(Wall wall)
 {
-    double a, b, c, C;
+    double a, b, c, beta, gamma, const PI = 3.14159;
 
     //hey, careful there mister! if the velocity magnitude is greater than the radius the player may just skip over the line!
     //and you forgot point collision lol
@@ -120,20 +120,16 @@ bool Player::isTouching(Wall wall)
 
         /* law of cosines to find angle
         the law in question: angle = acos((a*a + b*b - c*c) / (2ab))
-        find distance away by then doing (b * sin(angle))
         compare distance to readius of the circle */
-        C = acos((a * a + b * b - c * c) / (2 * a * b));
+        beta = acos((a * a + c * c - b * b) / (2 * a * c));
+        gamma = acos((a * a + b * b - c * c) / (2 * a * b));
 
-        if (C <= 3.14159 / 2)
+        if ((b < hitbox.getRadius() || c < hitbox.getRadius())
+            || (gamma <= PI / 2.f && beta <= PI / 2.f 
+            && b * sin(gamma) < hitbox.getRadius()))
         {
-            //law of sines to find other angle, to check if the circle is past the wall and no longer needs to be checked
-            if (asin(sin(C) * b / c) <= 3.14159 / 2)
-            {
-                if (i == 0)
-                    std::cout << C * 180 / 3.14159 << " " << asin(sin(C) * b / c) * 180 / 3.14159 << " " << i << '\n';
-                if (b * sin(C) < hitbox.getRadius())
-                    return true;
-            }
+            std::cout << gamma << ' ' << beta * 180 / PI << std::endl;
+            return true;
         }
     }
 

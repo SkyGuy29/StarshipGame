@@ -16,6 +16,7 @@ public:
 	void addVel(sf::Vector2f add) { vel += add; };
 	void setVelAngle(double);
 	void setVelMagnitude(double);
+	void setColor(sf::Color c) { hitbox.setFillColor(c); spinner.setFillColor(c); }
 	void update(sf::RenderWindow&);
 	bool isTouching(Wall);
 	/*

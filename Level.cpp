@@ -20,7 +20,11 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 	player.update(window);
 	if (player.isTouching(wall))
 	{
-		std::cout << "hi ";
+		player.setColor(sf::Color::Red);
+	}
+	else
+	{
+		player.setColor(sf::Color::Cyan);
 	}
 	view.setCenter(player.getPos());
 
