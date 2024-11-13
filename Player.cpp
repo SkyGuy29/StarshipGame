@@ -114,9 +114,9 @@ bool Player::isTouching(Wall wall)
     //and you forgot point collision lol
     for (int i = 0; i < wall.getWallCount(); i++)
     {
-        a = length(wall.getPoint(i), wall.getPoint(i + 1)); //a
-        b = length(hitbox.getPosition(), wall.getPoint(i)); //b
-        c = length(hitbox.getPosition(), wall.getPoint(i + 1)); //c
+        a = length(wall.getPoint(i), wall.getPoint(i + 1));
+        b = length(hitbox.getPosition(), wall.getPoint(i));
+        c = length(hitbox.getPosition(), wall.getPoint(i + 1));
 
         /* law of cosines to find angle
         the law in question: angle = acos((a*a + b*b - c*c) / (2ab))

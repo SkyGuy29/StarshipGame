@@ -12,6 +12,7 @@ void Level::load(int levelNum)
 	bgImg.loadFromFile("the q.jpg");
 	wall.load("walls.txt");
 	background.setTexture(bgImg);
+	background.setScale(2, 2);
 }
 
 
