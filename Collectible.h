@@ -5,7 +5,6 @@
 class Collectible
 {
 public:
-
 	void load(std::fstream&);
 	float getRadius() const { return circ.getRadius(); }
 	sf::Vector2f getPos() const { return circ.getPosition(); }

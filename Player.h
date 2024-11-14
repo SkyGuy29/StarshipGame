@@ -19,6 +19,7 @@ public:
 	void update(sf::RenderWindow&);
 	void activateWarp() { warpActive = true; }
 	void activateBoost() { slideMode = false; travelTimer.restart(); }
+	void kill() { alive = false; }
 	bool isTouching(Wall);
 	bool isTouching(Collectible);
 	/*
@@ -31,7 +32,7 @@ private:
 	void decelerate();
 	void updateVelocity();
 
-	bool mousePressed = false, warpActive = false, slideMode = true;
+	bool mousePressed = false, warpActive = false, slideMode = true, alive = true;
 	double angle = 0, magnitude = 0;
 
 	//hitbox

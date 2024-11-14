@@ -26,12 +26,12 @@ void Player::update(sf::RenderWindow& window)
         theta = atan(d.y / d.x);
 
         if (d.x < 0) //if its negative...
-            theta += 3.14159; //add pi to get the angles past the range of atan(), angles > pi/2
+            theta += PI; //add pi to get the angles past the range of atan(), angles > pi/2
     }
     else if (d.y < 0) //mouse ABOVE player
-        theta = -3.14159 / 2;
+        theta = PI / 2;
     else
-        theta = 3.14159 / 2;
+        theta = PI / 2;
 
     //aims the spinner at the cursor using math
     spinner.setRotation(theta * 180 / 3.14159); //convert to degrees lol
@@ -109,7 +109,7 @@ void Player::update(sf::RenderWindow& window)
 
 bool Player::isTouching(Wall wall)
 {
-    double a, b, c, beta, gamma, const PI = 3.14159;
+    double a, b, c, beta, gamma;
 
     for (int i = 0; i < wall.getWallCount(); i++)
     {

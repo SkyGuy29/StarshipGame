@@ -2,7 +2,6 @@
 #include "globals.cpp"
 #include <vector>
 #include <string>
-#include <math.h>
 #include <fstream>
 
 

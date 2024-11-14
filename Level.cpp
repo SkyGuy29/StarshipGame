@@ -27,7 +27,7 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 
 	if (player.isTouching(wall))
 	{
-		player.setColor(sf::Color::Red);
+		player.kill();
 	}
 	else
 	{
