@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Collectible.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
@@ -140,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Collectible.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Player.h" />
@@ -150,7 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="slide math explanation.txt" />
-    <Text Include="walls.txt" />
+    <Text Include="data.txt" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="pusab.otf" />

@@ -11,10 +11,10 @@ class Wall
 {
 public:
     Wall();
-    void load(std::string);
+    void load(std::fstream&);
     int getWallCount() const { return point.size(); };
     sf::Vector2f getPoint(int index) const { index %= point.size(); return point.at(index); };
-    void drawTo(sf::RenderWindow& window);
+    void drawTo(sf::RenderWindow&);
 private:
     std::vector<sf::Vector2f> point;
     sf::RectangleShape line;

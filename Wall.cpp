@@ -9,10 +9,9 @@ Wall::Wall()
 }
 
 
-void Wall::load(std::string fileName)
+void Wall::load(std::fstream& file)
 {
-    std::fstream file(fileName, std::ios::in);
-    int x, y;
+    float x, y;
 
     while (file.is_open() && !file.eof()) //this is somewhat temporary
     {

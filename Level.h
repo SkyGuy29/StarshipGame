@@ -20,11 +20,12 @@ public:
 	//handles most of the actual level gameplay, updating all of the things going on inside of the level
 	ExitCondition update(sf::RenderWindow&, sf::View&);
 	//draws all of the level's contents to the window
-	void drawTo(sf::RenderWindow&, bool = false);
+	void drawTo(sf::RenderWindow&);
 private:
 	sf::Texture bgImg;
 	sf::Sprite background;
 	Player player;
-	Wall wall; //should be vector later
+	Wall wall; //maybe be a vector later if i need multiple walls like this
+	std::vector<Collectible> powerups;
 };
 

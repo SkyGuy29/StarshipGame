@@ -25,7 +25,7 @@ void Player::update(sf::RenderWindow& window)
         theta = atan(d.y / d.x);
 
         if (d.x < 0) //if its negative...
-            theta += 3.14159; //add pi to get the angles past the range of atan() (> pi/2)
+            theta += 3.14159; //add pi to get the angles past the range of atan(), angles > pi/2
     }
     else if (d.y < 0) //mouse ABOVE player
         theta = -3.14159 / 2;
@@ -71,8 +71,8 @@ void Player::update(sf::RenderWindow& window)
     }
     else
     {
-        angle = theta;
-        magnitude = 10;
+        angle = theta; //will now move player toward the mouse
+        magnitude = 10; //at a constant speed
         updateVelocity();
 
         if (warpActive && !sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePressed)
@@ -136,6 +136,13 @@ bool Player::isTouching(Wall wall)
 }
 
 
+bool Player::isTouching(Collectible collect)
+{
+    //gotta love how comically easy this is compared to the wall collision
+    return length(collect.getPos(), getPos()) <= hitbox.getRadius() + collect.getRadius();
+}
+
+
 void Player::setVelAngle(double newAngle)
 {
 	angle = newAngle;
@@ -150,7 +157,7 @@ void Player::setVelMagnitude(double newMagnitude)
 }
 
 
-void Player::drawTo(sf::RenderWindow& window, bool showHitboxes)
+void Player::drawTo(sf::RenderWindow& window)
 {
 	window.draw(spinner);
 	window.draw(hitbox);
@@ -172,7 +179,7 @@ void Player::decelerate()
 
 void Player::updateVelocity()
 {
-	vel.x = magnitude * cos(angle); //negative?
+	vel.x = magnitude * cos(angle);
 	vel.y = magnitude * sin(angle);
     initVel = vel;
 }
@@ -180,7 +187,6 @@ void Player::updateVelocity()
 
 float Player::length(sf::Vector2f point1, sf::Vector2f point2)
 {
-    sf::Vector2f d;
-    d = point1 - point2; //this just makes my life easier
+    sf::Vector2f d = point1 - point2; //this just makes my life easier
     return hypotf(d.x, d.y);
 }

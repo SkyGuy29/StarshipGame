@@ -1,5 +1,6 @@
 #pragma once
 #include "Wall.h"
+#include "Collectible.h"
 
 
 const int FRAMERATE = 60;
@@ -17,15 +18,18 @@ public:
 	void setVelAngle(double);
 	void setVelMagnitude(double);
 	void setColor(sf::Color c) { hitbox.setFillColor(c); spinner.setFillColor(c); }
+	//updates the player based on current states, ex: moving it by its velocity
 	void update(sf::RenderWindow&);
+	void activateWarp() { warpActive = true; }
+	void activateBoost() { slideMode = false; travelTimer.restart(); }
 	bool isTouching(Wall);
+	bool isTouching(Collectible);
 	/*
 	bool isTouching(Wormhole);
-	bool isTouching(Collectible));
 	bool isTouching(BouncePad);
 	bool isTouching(Booster);
 	*/
-	void drawTo(sf::RenderWindow&, bool = false);
+	void drawTo(sf::RenderWindow&);
 private:
 	void decelerate();
 	void updateVelocity();
