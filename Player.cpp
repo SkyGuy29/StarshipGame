@@ -20,6 +20,7 @@ void Player::update(sf::RenderWindow& window)
     
     double theta; //angle between mouse and player, different than the angle member which is used for velocity
 
+    //assigning a value to theta
     if (d.x != 0) //preventing division by 0
     {
         theta = atan(d.y / d.x);
@@ -110,8 +111,6 @@ bool Player::isTouching(Wall wall)
 {
     double a, b, c, beta, gamma, const PI = 3.14159;
 
-    //hey, careful there mister! if the velocity magnitude is greater than the radius the player may just skip over the line!
-    //and you forgot point collision lol
     for (int i = 0; i < wall.getWallCount(); i++)
     {
         a = length(wall.getPoint(i), wall.getPoint(i + 1));
@@ -182,11 +181,4 @@ void Player::updateVelocity()
 	vel.x = magnitude * cos(angle);
 	vel.y = magnitude * sin(angle);
     initVel = vel;
-}
-
-
-float Player::length(sf::Vector2f point1, sf::Vector2f point2)
-{
-    sf::Vector2f d = point1 - point2; //this just makes my life easier
-    return hypotf(d.x, d.y);
 }

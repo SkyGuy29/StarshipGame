@@ -1,10 +1,9 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include "globals.cpp"
 #include <vector>
 #include <string>
 #include <math.h>
 #include <fstream>
-#include <iostream>
 
 
 class Wall 

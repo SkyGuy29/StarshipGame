@@ -134,6 +134,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Collectible.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="globals.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />

@@ -1,5 +1,5 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include "globals.cpp"
 #include <fstream>
 
 class Collectible

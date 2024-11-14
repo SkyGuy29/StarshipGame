@@ -3,9 +3,6 @@
 #include "Collectible.h"
 
 
-const int FRAMERATE = 60;
-
-
 class Player
 {
 public:
@@ -33,7 +30,6 @@ public:
 private:
 	void decelerate();
 	void updateVelocity();
-	float length(sf::Vector2f, sf::Vector2f);
 
 	bool mousePressed = false, warpActive = false, slideMode = true;
 	double angle = 0, magnitude = 0;
