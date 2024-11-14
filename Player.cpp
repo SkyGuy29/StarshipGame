@@ -128,7 +128,6 @@ bool Player::isTouching(Wall wall)
             || (gamma <= PI / 2.f && beta <= PI / 2.f 
             && b * sin(gamma) < hitbox.getRadius()))
         {
-            std::cout << gamma << ' ' << beta * 180 / PI << std::endl;
             return true;
         }
     }
