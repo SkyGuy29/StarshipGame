@@ -25,25 +25,45 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 {
 	player.update(window);
 
-	if (player.isTouching(wall))
+	if (player.isActive())
 	{
-		player.kill();
-	}
-	else
-	{
-		player.setColor(sf::Color::Cyan);
-	}
 
-	if (powerups.size() != 0)
-	{
-		if (player.isTouching(powerups.at(0)))
+		if (player.isTouching(wall))
 		{
-			player.activateBoost();
-			powerups.pop_back(); //change to an erase
+			player.kill();
+			timer.restart();
+		}
+
+		if (powerups.size() != 0)
+		{
+			if (player.isTouching(powerups.at(0)))
+			{
+				player.activateBoost();
+				powerups.pop_back(); //change to an erase
+			}
+		}
+
+		view.setCenter(player.getPos());
+	}
+	else if (timer.getElapsedTime().asMilliseconds() >= 2000)
+	{
+		if (!player.isAlive())
+		{
+			viewSlideStart = player.getPos();
+			player.respawn();
+		}
+
+		if(timer.getElapsedTime().asMilliseconds() < 3000)
+		{
+			view.setCenter(easeInOut(viewSlideStart, player.getPos(),
+				(timer.getElapsedTime().asMilliseconds() - 2000) / 1000.f));
+		}
+		else
+		{
+			player.ready();
 		}
 	}
 
-	view.setCenter(player.getPos());
 
 	return ExitCondition::NONE;
 }

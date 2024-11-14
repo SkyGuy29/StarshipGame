@@ -24,6 +24,8 @@ public:
 private:
 	sf::Texture bgImg;
 	sf::Sprite background;
+	sf::Clock timer;
+	sf::Vector2f viewSlideStart; //used for death reset
 	Player player;
 	Wall wall; //maybe be a vector later if i need multiple walls like this
 	std::vector<Collectible> powerups;

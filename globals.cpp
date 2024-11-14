@@ -12,10 +12,10 @@ static const int FRAMERATE = 60;
 //t MUST be between 0 and 1.
 static sf::Vector2f easeInOut(sf::Vector2f point1, sf::Vector2f point2, float t)
 {
-    sf::Vector2f d = point1 - point2;
-    float ease = t * t * (3.0f - 2.0f * t);
+    sf::Vector2f d = point2 - point1;
+    float ease = t * t * (3.f - 2.f * t);
 
-    return sf::Vector2f(d.x * ease, d.y * ease);
+    return sf::Vector2f(point1.x + d.x * ease, point1.y + d.y * ease);
 }
 
 
