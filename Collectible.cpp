@@ -9,8 +9,8 @@ void Collectible::load(std::fstream& file)
 	circ.setPosition(x, y);
 	*/
 
-	circ.setRadius(10.f);
-	circ.setOrigin(10.f, 10.f);
+	circ.setRadius(20.f);
+	circ.setOrigin(circ.getRadius(), circ.getRadius());
 	circ.setPosition(500.f, 400.f);
 	circ.setFillColor(sf::Color::Green);
 }

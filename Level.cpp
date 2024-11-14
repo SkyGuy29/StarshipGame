@@ -27,7 +27,6 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 
 	if (player.isActive())
 	{
-
 		if (player.isTouching(wall))
 		{
 			player.kill();
@@ -45,7 +44,7 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 
 		view.setCenter(player.getPos());
 	}
-	else if (timer.getElapsedTime().asMilliseconds() >= 2000)
+	else if (timer.getElapsedTime().asMilliseconds() >= 1500)
 	{
 		if (!player.isAlive())
 		{
@@ -53,10 +52,10 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 			player.respawn();
 		}
 
-		if(timer.getElapsedTime().asMilliseconds() < 3000)
+		if(timer.getElapsedTime().asMilliseconds() < 2000)
 		{
 			view.setCenter(easeInOut(viewSlideStart, player.getPos(),
-				(timer.getElapsedTime().asMilliseconds() - 2000) / 1000.f));
+				(timer.getElapsedTime().asMilliseconds() - 1500) / 500.f));
 		}
 		else
 		{
