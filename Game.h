@@ -24,9 +24,10 @@ private:
 	int currentLevel = 1;
 	bool paused = false;
 
-	Level level;
 	sf::RenderWindow window;
 	sf::View view;
+	sf::RectangleShape pauseOverlay;
+	Level level;
+	Button testButton, pauseButtons[3]; //needs to be a vector eventually
 	Menu currentMenu = Menu::START; //do not change without the function
-	Button testButton, pauseButton; //needs to be a vector eventually
 };

@@ -32,7 +32,7 @@ void Player::update(sf::RenderWindow& window)
                 theta += PI; //add pi to get the angles past the range of atan(), angles > pi/2
         }
         else if (d.y < 0) //mouse ABOVE player
-            theta = PI / 2;
+            theta = -PI / 2;
         else
             theta = PI / 2;
 

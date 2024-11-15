@@ -35,7 +35,7 @@ void Button::setString(std::string newString)
 bool Button::isActivated(sf::RenderWindow& window)
 {
 	//if mouse is inside of the circle
-	if (length(sf::Vector2f(sf::Mouse::getPosition(window)),
+	if (length(sf::Vector2f(window.mapPixelToCoords(sf::Mouse::getPosition(window))),
 		clickCirc.getPosition()) < clickCirc.getRadius())
 	{
 		clickCirc.setFillColor(sf::Color(0, 255, 255, 200));
@@ -51,6 +51,8 @@ bool Button::isActivated(sf::RenderWindow& window)
 	//checks if the mouse has been pressed, needed for the release check
 	if (isButtonPressed(sf::Mouse::Left))
 		mousePressed = true;
+	else
+		mousePressed = false;
 	
 	return false;
 }

@@ -3,9 +3,9 @@
 
 Wall::Wall()
 {
-    line.setSize(sf::Vector2f(20, 2));
+    line.setSize(sf::Vector2f(20, 4));
     line.setFillColor(sf::Color::White);
-    line.setOrigin(0, 1);
+    line.setOrigin(0, 2);
 }
 
 
