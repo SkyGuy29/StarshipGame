@@ -22,10 +22,11 @@ private:
 	void changeMenu(Menu);
 
 	int currentLevel = 1;
+	bool paused = false;
 
 	Level level;
 	sf::RenderWindow window;
 	sf::View view;
 	Menu currentMenu = Menu::START; //do not change without the function
-	Button testButton; //needs to be a vector eventually
+	Button testButton, pauseButton; //needs to be a vector eventually
 };

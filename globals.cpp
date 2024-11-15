@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cmath>
+#define isKeyPressed sf::Keyboard::isKeyPressed
+#define isButtonPressed sf::Mouse::isButtonPressed
 
 
 static const float PI = 3.14159;

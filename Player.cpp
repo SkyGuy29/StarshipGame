@@ -43,16 +43,16 @@ void Player::update(sf::RenderWindow& window)
         if (active)
         {
             //debug keys, will be removed when colectibles are added
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+            if (isKeyPressed(sf::Keyboard::Z))
             {
                 slideMode = true;
             }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
+            else if (isKeyPressed(sf::Keyboard::X))
             {
                 slideMode = false;
                 travelTimer.restart();
             }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+            else if (isKeyPressed(sf::Keyboard::C))
             {
                 warpActive = true;
             }
@@ -60,7 +60,7 @@ void Player::update(sf::RenderWindow& window)
             //changes movement based on the current mode
             if (slideMode)
             {
-                if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePressed)
+                if (!isButtonPressed(sf::Mouse::Left) && mousePressed)
                 {
                     if (warpActive)
                     {
@@ -82,7 +82,7 @@ void Player::update(sf::RenderWindow& window)
                 magnitude = 10; //at a constant speed
                 updateVelocity();
 
-                if (warpActive && !sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePressed)
+                if (warpActive && !isButtonPressed(sf::Mouse::Left) && mousePressed)
                 {
                     hitbox.setPosition(mouseMap);
                     //instantly warp player and have view catch up (fast, slide math for easing????????)
@@ -106,7 +106,7 @@ void Player::update(sf::RenderWindow& window)
             spinner.setPosition(hitbox.getPosition());
 
             //used for checking when a release has happened
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            if (isButtonPressed(sf::Mouse::Left))
                 mousePressed = true;
             else
                 mousePressed = false;

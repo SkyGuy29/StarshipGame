@@ -23,7 +23,7 @@ public:
 	void update(sf::RenderWindow&);
 	void activateWarp() { warpActive = true; }
 	void activateBoost() { slideMode = false; travelTimer.restart(); }
-	void kill() { vel.x = vel.y = 0; alive = active = false; }
+	void kill() { vel.x = vel.y = 0; warpActive = alive = active = false; }
 	bool isAlive() const { return alive; }
 	bool isActive() const { return active; }
 	bool isTouching(Wall);

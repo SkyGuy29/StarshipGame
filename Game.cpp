@@ -38,15 +38,20 @@ void Game::run()
         case Menu::SETTINGS:
             break;
         case Menu::LEVEL:
-            level.update(window, view);
-            //pause button and menu
+            if (isKeyPressed(sf::Keyboard::Escape) || isKeyPressed(sf::Keyboard::P))
+                paused = true;
+
+            if (!paused)
+            {
+                level.update(window, view);
+            }
             break;
         case Menu::END:
             break;
         default:
             break;
         }
-        
+
         window.setView(view);
 
         window.clear();
@@ -63,6 +68,10 @@ void Game::run()
             break;
         case Menu::LEVEL:
             level.drawTo(window);
+            if (paused)
+            {
+
+            }
             break;
         case Menu::END:
             break;

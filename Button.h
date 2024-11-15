@@ -1,13 +1,14 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include "globals.cpp"
 #include <string>
 
 
 class Button
 {
 public:
-	Button(float = 100.f);
+	Button();
 	~Button() {};
+	void setRadius(float rad) { clickCirc.setRadius(rad); }
 	//changes the current center of the button to a new position
 	void setPos(sf::Vector2f);
 	//changes the string of the button

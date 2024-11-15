@@ -3,7 +3,9 @@
 
 Level::Level()
 {
-
+	bgImg.loadFromFile("the q.jpg");
+	background.setTexture(bgImg);
+	background.setScale(2, 2);
 }
 
 
@@ -18,10 +20,6 @@ void Level::load(int levelNum)
 		powerups.at(i).setID(i);
 	}
 	file.close();
-
-	bgImg.loadFromFile("the q.jpg");
-	background.setTexture(bgImg);
-	background.setScale(2, 2);
 }
 
 
