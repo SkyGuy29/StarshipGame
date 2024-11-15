@@ -57,7 +57,14 @@ void Game::run()
 
             if (!paused)
             {
-                level.update(window, view);
+                switch (level.update(window, view))
+                {
+                case ExitCondition::WIN:
+                    //activate win overlay
+                    break;
+                default:
+                    break;
+                }
             }
             else
             {

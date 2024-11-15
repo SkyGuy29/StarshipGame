@@ -3,9 +3,9 @@
 
 Player::Player()
 {
-	hitbox.setFillColor(sf::Color::Cyan);
-	hitbox.setRadius(30.f);
-	hitbox.setOrigin(hitbox.getRadius(), hitbox.getRadius());
+	circ.setFillColor(sf::Color::Cyan);
+	circ.setRadius(30.f);
+	circ.setOrigin(circ.getRadius(), circ.getRadius());
     spinner.setSize(sf::Vector2f(50, 16));
     spinner.setFillColor(sf::Color::Cyan);
     spinner.setOrigin(0, 8);
@@ -18,10 +18,10 @@ void Player::update(sf::RenderWindow& window)
     sf::Vector2f mouseMap, d;
 
     //not super nessecary to put in the alive, just optimization
-    if (alive)
+    if (alive && !levelWon)
     {
         mouseMap = sf::Vector2f(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
-        d = mouseMap - hitbox.getPosition();
+        d = mouseMap - circ.getPosition();
 
         //assigning a value to theta
         if (d.x != 0) //preventing division by 0
@@ -64,7 +64,7 @@ void Player::update(sf::RenderWindow& window)
                 {
                     if (warpActive)
                     {
-                        hitbox.setPosition(mouseMap);
+                        circ.setPosition(mouseMap);
                         //instantly warp player and have view catch up (fast, slide math for easing????????)
                         warpActive = false;
                     }
@@ -84,7 +84,7 @@ void Player::update(sf::RenderWindow& window)
 
                 if (warpActive && !isButtonPressed(sf::Mouse::Left) && mousePressed)
                 {
-                    hitbox.setPosition(mouseMap);
+                    circ.setPosition(mouseMap);
                     //instantly warp player and have view catch up (fast, slide math for easing????????)
                     warpActive = false;
                 }
@@ -98,12 +98,12 @@ void Player::update(sf::RenderWindow& window)
             //moves the player if it has velocity
             if (vel.x != 0 && vel.y != 0)
             {
-                hitbox.setPosition(hitbox.getPosition() + vel);
+                circ.setPosition(circ.getPosition() + vel);
                 if (slideMode)
                     decelerate();
             }
 
-            spinner.setPosition(hitbox.getPosition());
+            spinner.setPosition(circ.getPosition());
 
             //used for checking when a release has happened
             if (isButtonPressed(sf::Mouse::Left))
@@ -122,8 +122,8 @@ bool Player::isTouching(Wall wall)
     for (int i = 0; i < wall.getWallCount(); i++)
     {
         a = length(wall.getPoint(i), wall.getPoint(i + 1));
-        b = length(hitbox.getPosition(), wall.getPoint(i));
-        c = length(hitbox.getPosition(), wall.getPoint(i + 1));
+        b = length(circ.getPosition(), wall.getPoint(i));
+        c = length(circ.getPosition(), wall.getPoint(i + 1));
 
         /* law of cosines to find angle
         the law in question: angle = acos((a*a + b*b - c*c) / (2ab))
@@ -131,9 +131,9 @@ bool Player::isTouching(Wall wall)
         beta = acos((a * a + c * c - b * b) / (2 * a * c));
         gamma = acos((a * a + b * b - c * c) / (2 * a * b));
 
-        if ((b < hitbox.getRadius() || c < hitbox.getRadius())
+        if ((b < circ.getRadius() || c < circ.getRadius())
             || (gamma <= PI / 2.f && beta <= PI / 2.f 
-            && b * sin(gamma) < hitbox.getRadius()))
+            && b * sin(gamma) < circ.getRadius()))
         {
             return true;
         }
@@ -146,7 +146,13 @@ bool Player::isTouching(Wall wall)
 bool Player::isTouching(Collectible collect)
 {
     //gotta love how comically easy this is compared to the wall collision
-    return length(collect.getPos(), getPos()) <= hitbox.getRadius() + collect.getRadius();
+    return length(collect.getPos(), getPos()) <= circ.getRadius() + collect.getRadius();
+}
+
+
+bool Player::isTouching(Goal goal)
+{
+    return length(goal.getPos(), getPos()) <= circ.getRadius() + goal.getRadius();
 }
 
 
@@ -169,7 +175,7 @@ void Player::drawTo(sf::RenderWindow& window)
     if (alive)
     {
 	    window.draw(spinner);
-	    window.draw(hitbox);
+	    window.draw(circ);
     }
 }
 

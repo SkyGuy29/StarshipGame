@@ -22,6 +22,8 @@ public:
 	//draws all of the level's contents to the window
 	void drawTo(sf::RenderWindow&);
 private:
+	bool levelWon = false;
+
 	sf::Texture bgImg;
 	sf::Sprite background;
 	sf::Clock timer;
@@ -29,5 +31,6 @@ private:
 	Player player;
 	Wall wall; //maybe be a vector later if i need multiple walls like this
 	std::vector<Collectible> powerups;
+	Goal goal;
 };
 

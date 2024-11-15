@@ -19,6 +19,7 @@ void Level::load(int levelNum)
 		powerups.at(i).load(file);
 		powerups.at(i).setID(i);
 	}
+	goal.load(file);
 	file.close();
 }
 
@@ -35,6 +36,14 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 			timer.restart();
 		}
 
+		if (player.isTouching(goal))
+		{
+			levelWon = true;
+			player.win();
+			viewSlideStart = player.getPos();
+			timer.restart();
+		}
+
 		for (int i = 0; i < powerups.size(); i++)
 		{
 			if (player.isTouching(powerups.at(i)))
@@ -48,10 +57,10 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 					player.activateWarp();
 					break;
 				case ID::TOGGLE:
-					std::cout << "lol\n";
+					std::cout << "lol\n"; //placeholder ofc
 					break;
 				case ID::SECRET:
-					std::cout << "YAAAAAAAAAAAAAAGH\n";
+					std::cout << "YAAAAAAAAAAAAAAGH\n"; //guess what =]
 					break;
 				default:
 					break;
@@ -64,7 +73,7 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 
 		view.setCenter(player.getPos());
 	}
-	else if (timer.getElapsedTime().asMilliseconds() >= 1500)
+	else if (!levelWon && timer.getElapsedTime().asMilliseconds() >= 1500)
 	{
 		if (!player.isAlive())
 		{
@@ -83,6 +92,17 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 		}
 	}
 
+	if (levelWon && timer.getElapsedTime().asMilliseconds() <= 2500 && timer.getElapsedTime().asMilliseconds() >= 500)
+	{
+		if (timer.getElapsedTime().asMilliseconds() < 1500)
+		{
+			view.setCenter(easeInOut(viewSlideStart, goal.getPos(), (timer.getElapsedTime().asMilliseconds() - 500) / 1000.f));
+		}
+	}
+	else
+	{
+		return ExitCondition::WIN;
+	}
 
 	return ExitCondition::NONE;
 }
@@ -96,5 +116,6 @@ void Level::drawTo(sf::RenderWindow& window)
 	{
 		powerups.at(i).drawTo(window);
 	}
+	goal.drawTo(window);
 	player.drawTo(window);
 }

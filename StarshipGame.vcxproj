@@ -135,6 +135,7 @@
     <ClCompile Include="Collectible.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="globals.cpp" />
+    <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -144,6 +145,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Collectible.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Goal.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Wall.h" />
