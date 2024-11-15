@@ -3,23 +3,22 @@
 
 Button::Button()
 {
-	clickCirc.setRadius(100.f);
-	clickCirc.setOrigin(100.f, 100.f);
-	clickCirc.setFillColor(sf::Color(0, 200, 200, 200));
+	circ.setRadius(100.f);
+	circ.setOrigin(100.f, 100.f);
+	circ.setFillColor(sf::Color(0, 175, 175));
 	pusab.loadFromFile("pusab.otf");
 	text.setFont(pusab);
 	text.setCharacterSize(20);
 	text.setFillColor(sf::Color::White);
 	text.setOutlineColor(sf::Color::Black);
 	text.setOutlineThickness(1);
-	text.setString("placeholder");
-	text.setOrigin(text.getLocalBounds().width / 2, text.getLocalBounds().height / 2);
+	setString("placeholder");
 }
 
 
 void Button::setPos(sf::Vector2f newPos)
 {
-	clickCirc.setPosition(newPos);
+	circ.setPosition(newPos);
 	text.setPosition(newPos);
 }
 
@@ -27,8 +26,8 @@ void Button::setPos(sf::Vector2f newPos)
 void Button::setString(std::string newString)
 {
 	text.setString(newString);	
-	text.setOrigin(text.getLocalBounds().width / 2, text.getLocalBounds().height / 2);
-	text.setPosition(clickCirc.getPosition());
+	text.setOrigin(text.getLocalBounds().width / 2.f, text.getLocalBounds().height / 2.f);
+	text.setPosition(circ.getPosition());
 }
 
 
@@ -36,9 +35,9 @@ bool Button::isActivated(sf::RenderWindow& window)
 {
 	//if mouse is inside of the circle
 	if (length(sf::Vector2f(window.mapPixelToCoords(sf::Mouse::getPosition(window))),
-		clickCirc.getPosition()) < clickCirc.getRadius())
+		circ.getPosition()) < circ.getRadius())
 	{
-		clickCirc.setFillColor(sf::Color(0, 255, 255, 200));
+		circ.setFillColor(sf::Color(0, 210, 210));
 		if (!isButtonPressed(sf::Mouse::Left) && mousePressed) //if click just released...
 		{
 			mousePressed = false;
@@ -46,7 +45,7 @@ bool Button::isActivated(sf::RenderWindow& window)
 		}
 	}
 	else
-		clickCirc.setFillColor(sf::Color(0, 200, 200, 200));
+		circ.setFillColor(sf::Color(0, 175, 175));
 	
 	//checks if the mouse has been pressed, needed for the release check
 	if (isButtonPressed(sf::Mouse::Left))
@@ -60,6 +59,6 @@ bool Button::isActivated(sf::RenderWindow& window)
 
 void Button::drawTo(sf::RenderWindow& window)
 {
-	window.draw(clickCirc);
+	window.draw(circ);
 	window.draw(text);
 }

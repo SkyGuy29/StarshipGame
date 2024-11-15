@@ -4,18 +4,15 @@
 
 Game::Game()
 {
+    buttons = new Button[BUTTONS_SIZE];
     window.create(sf::VideoMode(1280, 720), "Shipping People LOL");
     window.setFramerateLimit(FRAMERATE);
     view = window.getDefaultView();
     view.setCenter(0, 0);
-    testButton.setPos(sf::Vector2f(0, 0));
-    testButton.setString("yay button");
-    pauseOverlay.setSize(sf::Vector2f(window.getSize().x - 100, window.getSize().y - 100));
-    pauseOverlay.setOrigin(pauseOverlay.getSize() / 2.f);
-    pauseOverlay.setFillColor(sf::Color(75, 75, 75, 100));
-    pauseButtons[0].setString("Exit");
-    pauseButtons[1].setString("Resume");
-    pauseButtons[2].setString("Options");
+    changeMenu(Menu::START);
+    overlay.setSize(sf::Vector2f(window.getSize().x - 100, window.getSize().y - 100));
+    overlay.setOrigin(overlay.getSize() / 2.f);
+    overlay.setFillColor(sf::Color(75, 75, 75, 100));
 }
 
 
@@ -34,7 +31,7 @@ void Game::run()
         switch (currentMenu)
         {
         case Menu::START:
-            if (testButton.isActivated(window))
+            if (buttons[0].isActivated(window))
             {
                 changeMenu(Menu::LEVEL); //temporary until level select exists
             }
@@ -45,47 +42,105 @@ void Game::run()
         case Menu::SETTINGS:
             break;
         case Menu::LEVEL:
-            if (isKeyPressed(sf::Keyboard::Escape) || isKeyPressed(sf::Keyboard::P))
+            //pauses the game
+            if (!levelComplete && isKeyPressed(sf::Keyboard::Escape) || isKeyPressed(sf::Keyboard::P))
             {
                 paused = true;
-                pauseOverlay.setPosition(view.getCenter());
-                for (int i = 0; i < 3; i++)
-                {
-                    pauseButtons[i].setPos(sf::Vector2f(view.getCenter().x + 350 * (i - 1), view.getCenter().y));
-                }
-            }
 
-            if (!paused)
-            {
-                switch (level.update(window, view))
-                {
-                case ExitCondition::WIN:
-                    //activate win overlay
-                    break;
-                default:
-                    break;
-                }
-            }
-            else
-            {
+                overlay.setPosition(view.getCenter());
                 for (int i = 0; i < 3; i++)
                 {
-                    if (pauseButtons[i].isActivated(window))
+                    buttons[i].setPos(sf::Vector2f(view.getCenter().x + 350 * (i - 1), view.getCenter().y));
+                    switch (i)
                     {
-                        paused = false;
+                    case 0:
+                        buttons[i].setString("Exit");
+                        break;
+                    case 1:
+                        buttons[i].setString("Resume");
+                        break;
+                    case 2:
+                        buttons[i].setString("Options");
+                        break;
+                    }
+                }
+            }
 
+            //checking pause buttons
+            if (paused)
+            {
+                for (int i = 0; i < BUTTONS_SIZE; i++)
+                {
+                    if (buttons[i].isActivated(window))
+                    {
                         switch (i)
                         {
                         case 0:
-                            changeMenu(Menu::START);
-                            break;
+                            changeMenu(Menu::START); //break shennanigains lol
                         case 1:
+                            paused = false;
+                            break;
                         case 2:
-                            //changeMenu(Menu::SETTINGS) //actually this wouldnt make sense since you are still in level.
+                            //changeMenu(Menu::SETTINGS) //actually this wouldnt make sense since you are still in level
                             //we need another overlay
                             break;
                         }
                     }
+                }
+            }
+            //checking level complete buttons
+            else if (levelComplete)
+            {
+                for (int i = 0; i < BUTTONS_SIZE; i++)
+                {
+                    if (buttons[i].isActivated(window))
+                    {
+                        levelComplete = false;
+                        switch (i)
+                        {
+                        case 0:
+                            //replay level
+                            level.load(currentLevel);
+                            break;
+                        case 1:
+                            //next level
+                            level.load(currentLevel++);
+                            break;
+                        case 2:
+                            changeMenu(Menu::START);
+                            break;
+                        }
+                    }
+                }
+            }
+            //run the level
+            else
+            {
+                switch (level.update(window, view)) //most game mechanics run in this function
+                {
+                case ExitCondition::WIN:
+                    levelComplete = true;
+
+                    overlay.setPosition(view.getCenter());
+                    for (int i = 0; i < 3; i++)
+                    {
+                        buttons[i].setPos(sf::Vector2f(view.getCenter().x + 350 * (i - 1), view.getCenter().y));
+                        switch (i)
+                        {
+                        case 0:
+                            buttons[i].setString("Replay");
+                            break;
+                        case 1:
+                            buttons[i].setString("Next");
+                            break;
+                        case 2:
+                            buttons[i].setString("Menu");
+                            break;
+                        }
+                    }
+                    break;
+                default:
+                    break;
                 }
             }
             break;
@@ -103,7 +158,7 @@ void Game::run()
         switch (currentMenu)
         {
         case Menu::START:
-            testButton.drawTo(window);
+            buttons[0].drawTo(window);
             break;
         case Menu::SELECT:
             break;
@@ -111,12 +166,12 @@ void Game::run()
             break;
         case Menu::LEVEL:
             level.drawTo(window);
-            if (paused)
+            if (paused || levelComplete)
             {
-                window.draw(pauseOverlay);
-                for (int i = 0; i < 3; i++)
+                window.draw(overlay);
+                for (int i = 0 ; i < 3; i++)
                 {
-                    pauseButtons[i].drawTo(window);
+                    buttons[i].drawTo(window);
                 }
             }
             break;
@@ -125,10 +180,11 @@ void Game::run()
         default:
             break;
         }
-
+                
         window.display();
     }
 }
+
 
 void Game::changeMenu(Menu newMenu)
 {
@@ -138,6 +194,8 @@ void Game::changeMenu(Menu newMenu)
     {
     case Menu::START:
         //set button positions
+        buttons[0].setString("yay button");
+        buttons[0].setPos(sf::Vector2f(0, 0));
         view.setCenter(0, 0);
         break;
     case Menu::SELECT:
@@ -148,7 +206,6 @@ void Game::changeMenu(Menu newMenu)
         break;
     case Menu::LEVEL:
         level.load(currentLevel);
-        level.update(window, view); //remove this and youll see what it does
         break;
     case Menu::END:
         //load the congratulations text, credits, thanks for playing, and a way to exit

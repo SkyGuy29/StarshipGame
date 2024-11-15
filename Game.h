@@ -1,6 +1,7 @@
 #pragma once
 #include "Level.h"
 #include "Button.h"
+#include <deque>
 
 
 enum class Menu
@@ -17,17 +18,18 @@ class Game
 {
 public:
 	Game();
+	~Game() { delete[] buttons; }
 	void run();
 private:
 	void changeMenu(Menu);
 
-	int currentLevel = 1;
-	bool paused = false;
+	int currentLevel = 1, const BUTTONS_SIZE = 20;
+	bool paused = false, levelComplete = false;
 
 	sf::RenderWindow window;
 	sf::View view;
-	sf::RectangleShape pauseOverlay;
+	sf::RectangleShape overlay;
 	Level level;
-	Button testButton, pauseButtons[3]; //needs to be a vector eventually
+	Button* buttons;
 	Menu currentMenu = Menu::START; //do not change without the function
 };

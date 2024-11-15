@@ -42,21 +42,6 @@ void Player::update(sf::RenderWindow& window)
 
         if (active)
         {
-            //debug keys, will be removed when colectibles are added
-            if (isKeyPressed(sf::Keyboard::Z))
-            {
-                slideMode = true;
-            }
-            else if (isKeyPressed(sf::Keyboard::X))
-            {
-                slideMode = false;
-                travelTimer.restart();
-            }
-            else if (isKeyPressed(sf::Keyboard::C))
-            {
-                warpActive = true;
-            }
-
             //changes movement based on the current mode
             if (slideMode)
             {

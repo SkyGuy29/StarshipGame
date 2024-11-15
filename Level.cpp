@@ -13,6 +13,7 @@ void Level::load(int levelNum)
 {
 	std::fstream file("data.txt", std::ios::in);
 	wall.load(file);
+	powerups.clear();
 	for (int i = 0; i < 4; i++)
 	{
 		powerups.push_back(Collectible());
@@ -21,6 +22,9 @@ void Level::load(int levelNum)
 	}
 	goal.load(file);
 	file.close();
+	levelWon = false;
+	player.respawn();
+	player.ready();
 }
 
 
@@ -52,6 +56,7 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 				{
 				case ID::BOOST:
 					player.activateBoost();
+					std::cout << "huh??\n";
 					break;
 				case ID::WARP:
 					player.activateWarp();
@@ -65,8 +70,6 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 				default:
 					break;
 				}
-
-				player.activateBoost();
 				powerups.erase(powerups.begin() + i);
 			}
 		}
@@ -92,14 +95,14 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 		}
 	}
 
-	if (levelWon && timer.getElapsedTime().asMilliseconds() <= 2500 && timer.getElapsedTime().asMilliseconds() >= 500)
+	if (levelWon && timer.getElapsedTime().asMilliseconds() <= 2500)
 	{
-		if (timer.getElapsedTime().asMilliseconds() < 1500)
+		if (timer.getElapsedTime().asMilliseconds() < 1500 && timer.getElapsedTime().asMilliseconds() >= 500)
 		{
 			view.setCenter(easeInOut(viewSlideStart, goal.getPos(), (timer.getElapsedTime().asMilliseconds() - 500) / 1000.f));
 		}
 	}
-	else
+	else if (levelWon)
 	{
 		return ExitCondition::WIN;
 	}

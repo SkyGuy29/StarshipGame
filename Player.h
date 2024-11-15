@@ -15,7 +15,7 @@ public:
 	//resets player position and enables drawing to window
 	void respawn() { circ.setPosition(0, 0); spinner.setPosition(0, 0); slideMode = alive = true; }
 	//reactivates player control once the view is done moving
-	void ready() { active = true; }
+	void ready() { active = true; levelWon = false; }
 	void addVel(sf::Vector2f add) { vel += add; };
 	void setVelAngle(double);
 	void setVelMagnitude(double);

@@ -8,7 +8,7 @@ class Button
 public:
 	Button();
 	~Button() {};
-	void setRadius(float rad) { clickCirc.setRadius(rad); }
+	void setRadius(float rad) { circ.setRadius(rad); }
 	//changes the current center of the button to a new position
 	void setPos(sf::Vector2f);
 	//changes the string of the button
@@ -20,7 +20,7 @@ public:
 private:
 	bool mousePressed = false;
 
-	sf::CircleShape clickCirc;
+	sf::CircleShape circ;
 	sf::Font pusab;
 	sf::Text text; //placeholder until sprites become a thing
 };
