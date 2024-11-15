@@ -38,78 +38,79 @@ void Player::update(sf::RenderWindow& window)
 
         //aims the spinner at the cursor using math
         spinner.setRotation(theta * 180 / 3.14159); //convert to degrees lol
-    }
 
-    if (active)
-    {
-        //debug keys, will be removed when colectibles are added
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
-        {
-            slideMode = true;
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
-        {
-            slideMode = false;
-            travelTimer.restart();
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
-        {
-            warpActive = true;
-        }
 
-        //changes movement based on the current mode
-        if (slideMode)
+        if (active)
         {
-            if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePressed)
+            //debug keys, will be removed when colectibles are added
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
             {
-                if (warpActive)
+                slideMode = true;
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
+            {
+                slideMode = false;
+                travelTimer.restart();
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+            {
+                warpActive = true;
+            }
+
+            //changes movement based on the current mode
+            if (slideMode)
+            {
+                if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePressed)
+                {
+                    if (warpActive)
+                    {
+                        hitbox.setPosition(mouseMap);
+                        //instantly warp player and have view catch up (fast, slide math for easing????????)
+                        warpActive = false;
+                    }
+                    else
+                    {
+                        vel.x = d.x / ((FRAMERATE + 1) / 2.f); //okay i dont like magic code but i actually do not know the explanation
+                        vel.y = d.y / ((FRAMERATE + 1) / 2.f); //also this is the only case where it makes more sense to directly set vel than use angle and magnitude
+                        initVel = vel;
+                    }
+                }
+            }
+            else
+            {
+                angle = theta; //will now move player toward the mouse
+                magnitude = 10; //at a constant speed
+                updateVelocity();
+
+                if (warpActive && !sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePressed)
                 {
                     hitbox.setPosition(mouseMap);
                     //instantly warp player and have view catch up (fast, slide math for easing????????)
                     warpActive = false;
                 }
-                else
+
+                if (travelTimer.getElapsedTime().asMilliseconds() >= 2000)
                 {
-                    vel.x = d.x / ((FRAMERATE + 1) / 2.f); //okay i dont like magic code but i actually do not know the explanation
-                    vel.y = d.y / ((FRAMERATE + 1) / 2.f); //also this is the only case where it makes more sense to directly set vel than use angle and magnitude
-                    initVel = vel;
+                    slideMode = true;
                 }
             }
-        }
-        else
-        {
-            angle = theta; //will now move player toward the mouse
-            magnitude = 10; //at a constant speed
-            updateVelocity();
 
-            if (warpActive && !sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePressed)
+            //moves the player if it has velocity
+            if (vel.x != 0 && vel.y != 0)
             {
-                hitbox.setPosition(mouseMap);
-                //instantly warp player and have view catch up (fast, slide math for easing????????)
-                warpActive = false;
+                hitbox.setPosition(hitbox.getPosition() + vel);
+                if (slideMode)
+                    decelerate();
             }
 
-            if (travelTimer.getElapsedTime().asMilliseconds() >= 2000)
-            {
-                slideMode = true;
-            }
+            spinner.setPosition(hitbox.getPosition());
+
+            //used for checking when a release has happened
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                mousePressed = true;
+            else
+                mousePressed = false;
         }
-
-        //moves the player if it has velocity
-        if (vel.x != 0 && vel.y != 0)
-        {
-            hitbox.setPosition(hitbox.getPosition() + vel);
-            if (slideMode)
-                decelerate();
-        }
-
-        spinner.setPosition(hitbox.getPosition());
-
-        //used for checking when a release has happened
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-            mousePressed = true;
-        else
-            mousePressed = false;
     }
 }
 

@@ -2,6 +2,16 @@
 #include "globals.cpp"
 #include <fstream>
 
+
+enum ID
+{
+	BOOST,
+	WARP,
+	TOGGLE,
+	SECRET
+};
+
+
 class Collectible
 {
 public:
@@ -9,17 +19,10 @@ public:
 	float getRadius() const { return circ.getRadius(); }
 	sf::Vector2f getPos() const { return circ.getPosition(); }
 	int getID() const { return id; }
+	void setID(int newID) { id = newID; } //THIS IS TEMPORARY ID WILL BE DETERMINED ON LOAD ONLY IN FINAL
 	void drawTo(sf::RenderWindow& window) { window.draw(circ); }
 private:
-	int id = 0; //determines what colectible does, may enumerate
+	int id = ID::BOOST; //determines what colectible does, may enumerate
 	sf::CircleShape circ;
 };
-
-/*
-types of collectibles:
-gives player a one use warp
-gives player a boost (travel mode or whatever)
-toggles off a lazer that blocks path?
-secret collectible
-*/
 

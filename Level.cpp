@@ -11,8 +11,12 @@ void Level::load(int levelNum)
 {
 	std::fstream file("data.txt", std::ios::in);
 	wall.load(file);
-	powerups.push_back(Collectible());
-	powerups.at(0).load(file);
+	for (int i = 0; i < 4; i++)
+	{
+		powerups.push_back(Collectible());
+		powerups.at(i).load(file);
+		powerups.at(i).setID(i);
+	}
 	file.close();
 
 	bgImg.loadFromFile("the q.jpg");
@@ -33,12 +37,30 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 			timer.restart();
 		}
 
-		if (powerups.size() != 0)
+		for (int i = 0; i < powerups.size(); i++)
 		{
-			if (player.isTouching(powerups.at(0)))
+			if (player.isTouching(powerups.at(i)))
 			{
+				switch (powerups.at(i).getID())
+				{
+				case ID::BOOST:
+					player.activateBoost();
+					break;
+				case ID::WARP:
+					player.activateWarp();
+					break;
+				case ID::TOGGLE:
+					std::cout << "lol\n";
+					break;
+				case ID::SECRET:
+					std::cout << "YAAAAAAAAAAAAAAGH\n";
+					break;
+				default:
+					break;
+				}
+
 				player.activateBoost();
-				powerups.pop_back(); //change to an erase
+				powerups.erase(powerups.begin() + i);
 			}
 		}
 
