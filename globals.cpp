@@ -22,8 +22,31 @@ static sf::Vector2f easeInOut(sf::Vector2f point1, sf::Vector2f point2, float t)
 
 
 //returns the distance between the two points.
-static float length(sf::Vector2f point1, sf::Vector2f point2)
+static float distBetween(sf::Vector2f point1, sf::Vector2f point2)
 {
     sf::Vector2f d = point1 - point2;
     return hypotf(d.x, d.y);
+}
+
+
+//returns the angle of the right triangle created by the x and y values of the given points.
+static float angleOf(sf::Vector2f p1, sf::Vector2f p2)
+{
+    sf::Vector2f d = p1 - p2;
+    float theta;
+
+    //assigning a value to theta
+    if (d.x != 0) //preventing division by 0
+    {
+        theta = atan(d.y / d.x);
+
+        if (d.x < 0) //if its negative...
+            theta += PI; //add pi to get the angles past the range of atan(), angles > pi/2
+    }
+    else if (d.y < 0) //mouse ABOVE player
+        theta = -PI / 2;
+    else
+        theta = PI / 2;
+
+    return theta;
 }

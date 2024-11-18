@@ -34,7 +34,7 @@ void Button::setString(std::string newString)
 bool Button::isActivated(sf::RenderWindow& window)
 {
 	//if mouse is inside of the circle
-	if (length(sf::Vector2f(window.mapPixelToCoords(sf::Mouse::getPosition(window))),
+	if (distBetween(sf::Vector2f(window.mapPixelToCoords(sf::Mouse::getPosition(window))),
 		circ.getPosition()) < circ.getRadius())
 	{
 		circ.setFillColor(sf::Color(0, 210, 210));

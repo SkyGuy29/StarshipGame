@@ -14,7 +14,7 @@ Player::Player()
 
 void Player::update(sf::RenderWindow& window)
 {
-    double theta; //angle between mouse and player, different than the angle member which is used for velocity
+    float theta; //angle between mouse and player, different than the angle member which is used for velocity
     sf::Vector2f mouseMap, d;
 
     //not super nessecary to put in the alive, just optimization
@@ -23,20 +23,9 @@ void Player::update(sf::RenderWindow& window)
         mouseMap = sf::Vector2f(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
         d = mouseMap - circ.getPosition();
 
-        //assigning a value to theta
-        if (d.x != 0) //preventing division by 0
-        {
-            theta = atan(d.y / d.x);
+        theta = angleOf(mouseMap, circ.getPosition());
 
-            if (d.x < 0) //if its negative...
-                theta += PI; //add pi to get the angles past the range of atan(), angles > pi/2
-        }
-        else if (d.y < 0) //mouse ABOVE player
-            theta = -PI / 2;
-        else
-            theta = PI / 2;
-
-        //aims the spinner at the cursor using math
+        //aims the spinner at the cursor
         spinner.setRotation(theta * 180 / 3.14159); //convert to degrees lol
 
 
@@ -106,9 +95,9 @@ bool Player::isTouching(Wall wall)
 
     for (int i = 0; i < wall.getWallCount(); i++)
     {
-        a = length(wall.getPoint(i), wall.getPoint(i + 1));
-        b = length(circ.getPosition(), wall.getPoint(i));
-        c = length(circ.getPosition(), wall.getPoint(i + 1));
+        a = distBetween(wall.getPoint(i), wall.getPoint(i + 1));
+        b = distBetween(circ.getPosition(), wall.getPoint(i));
+        c = distBetween(circ.getPosition(), wall.getPoint(i + 1));
 
         /* law of cosines to find angle
         the law in question: angle = acos((a*a + b*b - c*c) / (2ab))
@@ -131,13 +120,13 @@ bool Player::isTouching(Wall wall)
 bool Player::isTouching(Collectible collect)
 {
     //gotta love how comically easy this is compared to the wall collision
-    return length(collect.getPos(), getPos()) <= circ.getRadius() + collect.getRadius();
+    return distBetween(collect.getPos(), getPos()) <= circ.getRadius() + collect.getRadius();
 }
 
 
 bool Player::isTouching(Goal goal)
 {
-    return length(goal.getPos(), getPos()) <= circ.getRadius() + goal.getRadius();
+    return distBetween(goal.getPos(), getPos()) <= circ.getRadius() + goal.getRadius();
 }
 
 
