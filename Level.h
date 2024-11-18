@@ -1,5 +1,8 @@
 #pragma once
 #include "Player.h"
+#include <string>
+#include <fstream>
+#include <sstream>
 
 
 enum class ExitCondition

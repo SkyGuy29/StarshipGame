@@ -12,7 +12,7 @@ Level::Level()
 
 void Level::load(int levelNum)
 {
-	std::ifstream file("data.txt"); //make this use levelNum pls =]
+	std::ifstream file("data.txt"); //make this use levelNum pls =] yes you will need new files also organize
     std::string line;
 	char currentLoad = ' ';
 
@@ -28,7 +28,7 @@ void Level::load(int levelNum)
         {
 			currentLoad = line[1];
         }
-		else if (line[0] != '/')
+		else if (line[0] != '/') //skips any comments like this one! no multilines tho...
 		{
 			std::istringstream iss(line); //chatgpt gave me this in full honesty, works for getting my data from the line tho
 			float x, y, id;
@@ -81,6 +81,7 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 			timer.restart();
 		}
 
+		//checking powerups collision
 		for (int i = 0; i < powerups.size(); i++)
 		{
 			if (player.isTouching(powerups.at(i)))
@@ -89,7 +90,6 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 				{
 				case ID::BOOST:
 					player.activateBoost();
-					std::cout << "huh??\n";
 					break;
 				case ID::WARP:
 					player.activateWarp();
@@ -109,6 +109,7 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 
 		view.setCenter(player.getPos());
 	}
+	//death animation
 	else if (!levelWon && timer.getElapsedTime().asMilliseconds() >= 1500)
 	{
 		if (!player.isAlive())
@@ -128,6 +129,7 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 		}
 	}
 
+	//end of level goal animation
 	if (levelWon && timer.getElapsedTime().asMilliseconds() <= 2500)
 	{
 		if (timer.getElapsedTime().asMilliseconds() < 1500 && timer.getElapsedTime().asMilliseconds() >= 500)

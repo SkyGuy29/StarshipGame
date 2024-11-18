@@ -26,7 +26,9 @@ public:
 	void activateBoost() { slideMode = false; travelTimer.restart(); }
 	void kill() { vel.x = vel.y = 0; warpActive = alive = active = false; }
 	void win() { vel.x = vel.y = 0; warpActive = active = false; levelWon = true; }
+	//returns true if player is meant to be shown on screen
 	bool isAlive() const { return alive; }
+	//returns true if player is meant to be controlled by user
 	bool isActive() const { return active; }
 	bool isTouching(Wall);
 	bool isTouching(Collectible);

@@ -1,9 +1,6 @@
 #pragma once
 #include "globals.cpp"
 #include <vector>
-#include <string>
-#include <fstream>
-#include <sstream>
 
 
 class Wall 
