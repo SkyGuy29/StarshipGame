@@ -156,7 +156,8 @@ void Player::drawTo(sf::RenderWindow& window)
 
 void Player::decelerate()
 {
-    //if the next velocity change would result in it flipping signs, that means it is done running and should be set to 0
+    //if the next velocity change would result in it flipping signs, 
+    //that means it is done running and should be set to 0
     if (abs(vel.x) >= abs(initVel.x) / FRAMERATE && abs(vel.y) >= abs(initVel.y) / FRAMERATE)
     {
         vel.x -= initVel.x / FRAMERATE; //should take exactly one second to slide

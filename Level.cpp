@@ -63,6 +63,7 @@ void Level::load(int levelNum)
 
 ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 {
+	//updating player stuff (like moving) before checking collisions
 	player.update(window);
 
 	if (player.isActive())
@@ -70,15 +71,15 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 		if (player.isTouching(wall))
 		{
 			player.kill();
-			timer.restart();
+			timer.restart(); //animation timer
 		}
 
 		if (player.isTouching(goal))
 		{
 			levelWon = true;
 			player.win();
-			viewSlideStart = player.getPos();
-			timer.restart();
+			viewSlideStart = player.getPos(); //for animation
+			timer.restart(); //animation timer
 		}
 
 		//checking powerups collision
@@ -107,7 +108,7 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 			}
 		}
 
-		view.setCenter(player.getPos());
+		view.setCenter(player.getPos()); //center the screen on the player
 	}
 	//death animation
 	else if (!levelWon && timer.getElapsedTime().asMilliseconds() >= 1500)
@@ -121,7 +122,7 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 		if(timer.getElapsedTime().asMilliseconds() < 2000)
 		{
 			view.setCenter(easeInOut(viewSlideStart, player.getPos(),
-				(timer.getElapsedTime().asMilliseconds() - 1500) / 500.f));
+				(timer.getElapsedTime().asMilliseconds() - 1500) / 500.f)); //sliding view
 		}
 		else
 		{
