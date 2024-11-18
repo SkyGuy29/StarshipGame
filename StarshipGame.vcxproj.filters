@@ -1,28 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Level.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="src\Button.cpp" />
+    <ClCompile Include="src\Collectible.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\globals.cpp" />
+    <ClCompile Include="src\Goal.cpp" />
+    <ClCompile Include="src\Level.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Level.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Button.h" />
-    <ClInclude Include="Wall.h" />
+    <ClInclude Include="src\Button.h" />
+    <ClInclude Include="src\Collectible.h" />
+    <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\Goal.h" />
+    <ClInclude Include="src\Level.h" />
+    <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\Wall.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="the q.jpg" />
+    <Image Include="resources\the_q.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="slide math explanation.txt" />
-    <Text Include="walls.txt" />
+    <Text Include="resources\levelData\level1.txt" />
+    <Text Include="resources\levelData\level2.txt" />
+    <Text Include="resources\slide math explanation.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Font Include="pusab.otf" />
+    <Font Include="resources\pusab.otf" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,15 @@
+// hi i am here using comments in my file!!
+// you may order these however you like however they must have their parentheses
+// no spaces between the lines also!
+// these will load until the next indicatior, put however many you want in here.
+// note for me (the dev): multiple walls support may be needed but that is of course based on how you do it
+(Walls)
+100 100
+200 100
+200 200
+100 200
+(Collectibles)
+175.6 150 0
+250 150 1
+(Goal)
+500 500

@@ -6,7 +6,7 @@ Button::Button()
 	circ.setRadius(100.f);
 	circ.setOrigin(100.f, 100.f);
 	circ.setFillColor(sf::Color(0, 175, 175));
-	pusab.loadFromFile("pusab.otf");
+	pusab.loadFromFile("resources/pusab.otf");
 	text.setFont(pusab);
 	text.setCharacterSize(20);
 	text.setFillColor(sf::Color::White);

@@ -4,7 +4,7 @@
 
 Level::Level()
 {
-	bgImg.loadFromFile("the q.jpg");
+	bgImg.loadFromFile("resources/the_q.jpg");
 	background.setTexture(bgImg);
 	background.setScale(2, 2);
 }
@@ -12,13 +12,15 @@ Level::Level()
 
 void Level::load(int levelNum)
 {
-	std::ifstream file("data.txt"); //make this use levelNum pls =] yes you will need new files also organize
     std::string line;
+	line = "resources/levelData/level" + std::to_string(levelNum) + ".txt";
+	std::cout << line << std::endl;
+	std::ifstream file(line);
 	char currentLoad = ' ';
 
     if (!file)
     {
-        std::cerr << "Unable to open file.\n";
+        std::cerr << "Unable to open level " << levelNum << ".\n";
     }
 
     //Read the file line by line
@@ -52,7 +54,7 @@ void Level::load(int levelNum)
 				goal.loadData(x, y);
 				break;
 			deafult:
-				std::cout << currentLoad << " << this character, loaded from your file, does not coorespond to a level element.\n";
+				std::cout << currentLoad << " << this character, loaded from your file, does not correspond to a level element.\n";
 			}
 		}
     }
@@ -111,22 +113,22 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 		view.setCenter(player.getPos()); //center the screen on the player
 	}
 	//death animation
-	else if (!levelWon && timer.getElapsedTime().asMilliseconds() >= 1500)
+	else if (!levelWon && timer.getElapsedTime().asMilliseconds() >= 1500) //death animation plays for 1.5 seconds before view slide
 	{
 		if (!player.isAlive())
 		{
-			viewSlideStart = player.getPos();
-			player.respawn();
+			viewSlideStart = player.getPos(); //setting an initial value
+			player.respawn(); //show player
 		}
 
 		if(timer.getElapsedTime().asMilliseconds() < 2000)
 		{
 			view.setCenter(easeInOut(viewSlideStart, player.getPos(),
-				(timer.getElapsedTime().asMilliseconds() - 1500) / 500.f)); //sliding view
+				(timer.getElapsedTime().asMilliseconds() - 1500) / 500.f)); //sliding the view
 		}
 		else
 		{
-			player.ready();
+			player.ready(); //timer finished
 		}
 	}
 
@@ -135,6 +137,7 @@ ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
 	{
 		if (timer.getElapsedTime().asMilliseconds() < 1500 && timer.getElapsedTime().asMilliseconds() >= 500)
 		{
+			//sliding to the goal, may be changed later
 			view.setCenter(easeInOut(viewSlideStart, goal.getPos(), (timer.getElapsedTime().asMilliseconds() - 500) / 1000.f));
 		}
 	}
