@@ -104,7 +104,7 @@ void Game::run()
                             break;
                         case 1:
                             //next level
-                            level.load(currentLevel++);
+                            level.load(++currentLevel);
                             break;
                         case 2:
                             changeMenu(Menu::START);

@@ -23,6 +23,13 @@ void Level::load(int levelNum)
         std::cerr << "Unable to open level " << levelNum << ".\n";
     }
 
+	levelWon = false;
+
+	wall.resetData();
+	powerups.clear();
+	player.respawn();
+	player.ready(); //temporary until an intro animation is added
+
     //Read the file line by line
     while (file.is_open() && std::getline(file, line))
     {

@@ -132,21 +132,6 @@ bool Player::isTouching(Goal goal)
     return distBetween(goal.getPos(), getPos()) <= circ.getRadius() + goal.getRadius();
 }
 
-
-void Player::setVelAngle(double newAngle)
-{
-	angle = newAngle;
-	updateVelocity();
-}
-
-
-void Player::setVelMagnitude(double newMagnitude)
-{
-	magnitude = newMagnitude;
-	updateVelocity();
-}
-
-
 void Player::drawTo(sf::RenderWindow& window)
 {
     if (alive)
