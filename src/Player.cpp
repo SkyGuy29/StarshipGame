@@ -46,7 +46,7 @@ void Player::update(sf::RenderWindow& window)
                     {
                         vel.x = d.x / ((FRAMERATE + 1) / 2.f); //okay i dont like magic code but i actually do not know the explanation
                         vel.y = d.y / ((FRAMERATE + 1) / 2.f); //also this is the only case where it makes more sense to directly set vel than use angle and magnitude
-                        initVel = vel;
+                        frictionVel = vel;
                     }
                 }
             }
@@ -63,21 +63,12 @@ void Player::update(sf::RenderWindow& window)
                     warpActive = false;
                 }
 
-                if (travelTimer.getElapsedTime().asMilliseconds() >= 2000)
+                if (boostTimer.getElapsedTime().asMilliseconds() >= 2000)
                 {
                     slideMode = true;
                 }
             }
 
-            //moves the player if it has velocity
-            if (vel.x != 0 && vel.y != 0)
-            {
-                circ.setPosition(circ.getPosition() + vel);
-                if (slideMode)
-                    decelerate();
-            }
-
-            spinner.setPosition(circ.getPosition());
 
             //used for checking when a release has happened
             if (isButtonPressed(sf::Mouse::Left))
@@ -85,6 +76,18 @@ void Player::update(sf::RenderWindow& window)
             else
                 mousePressed = false;
         }
+            
+        prevPos = circ.getPosition();
+
+        //moves the player if it has velocity
+        if (vel.x != 0 && vel.y != 0)
+        {
+            circ.setPosition(circ.getPosition() + vel);
+            if (slideMode)
+                decelerate();
+        }
+
+        spinner.setPosition(circ.getPosition());
     }
 }
 
@@ -158,10 +161,10 @@ void Player::decelerate()
 {
     //if the next velocity change would result in it flipping signs, 
     //that means it is done running and should be set to 0
-    if (abs(vel.x) >= abs(initVel.x) / FRAMERATE && abs(vel.y) >= abs(initVel.y) / FRAMERATE)
+    if (abs(vel.x) >= abs(frictionVel.x) / FRAMERATE && abs(vel.y) >= abs(frictionVel.y) / FRAMERATE)
     {
-        vel.x -= initVel.x / FRAMERATE; //should take exactly one second to slide
-        vel.y -= initVel.y / FRAMERATE;
+        vel.x -= frictionVel.x / FRAMERATE; //should take exactly one second to slide
+        vel.y -= frictionVel.y / FRAMERATE;
     }
     else
         vel.x = vel.y = 0;
@@ -172,5 +175,5 @@ void Player::updateVelocity()
 {
 	vel.x = magnitude * cos(angle);
 	vel.y = magnitude * sin(angle);
-    initVel = vel;
+    frictionVel = vel;
 }
