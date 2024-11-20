@@ -105,9 +105,9 @@ bool Player::isTouching(Wall wall)
         beta = lawOfCos(a, c, b);
         gamma = lawOfCos(a, b, c);
 
-        if ((b < circ.getRadius() || c < circ.getRadius())
-            || (gamma <= PI / 2.f && beta <= PI / 2.f 
-            && b * sin(gamma) < circ.getRadius()))
+        if ((b < circ.getRadius() || c < circ.getRadius()) //if the point is inside the circle
+            || (gamma <= PI / 2.f && beta <= PI / 2.f //or if both angles are acute
+            && b * sin(gamma) < circ.getRadius())) //and the height of triangle abc < radius...
         {
             return true;
         }
@@ -119,20 +119,24 @@ bool Player::isTouching(Wall wall)
 
 bool Player::hasCrossed(Wall wall)
 {
-    float alpha = 0, beta = 0, gamma = 0;
+    float alpha = 0, beta = 0;
     sf::Vector2f intersect;
 
     for (int i = 0; i < wall.getWallCount(); i++)
     {
+        //finding the theoretical intersection point of the wall and the
+        //line between the previous and current player positions.
+        //this math is a little crazy.
         alpha = lawOfCos(prevPos, getPos(), wall.getPoint(i));
-        beta = lawOfCos(wall.getPoint(i), prevPos, getPos());
-        gamma = 180 - alpha - beta;
+        beta = lawOfCos(wall.getPoint(i), wall.getPoint(i + 1), prevPos);
+        alpha = 180 - alpha - beta;
 
         //distBetween(prevPos, INTERSECTION) 
-        beta = sin(gamma) * distBetween(prevPos, wall.getPoint(i)) / sin(beta);
+        beta = sin(alpha) * distBetween(prevPos, wall.getPoint(i)) / sin(beta);
         
-        intersect.x = beta * cos(angleOf(prevPos, getPos()));
-        intersect.y = beta * sin(angleOf(prevPos, getPos()));
+        intersect = prevPos;
+        intersect.x += beta * cos(angleOf(prevPos, getPos()));
+        intersect.y += beta * sin(angleOf(prevPos, getPos()));
     }
 }
 
