@@ -119,6 +119,7 @@ bool Player::isTouching(Wall wall)
 
 bool Player::hasCrossed(Wall wall)
 {
+    int intersectCount = 0;
     float alpha = 0, beta = 0;
     sf::Vector2f intersect;
 
@@ -137,7 +138,21 @@ bool Player::hasCrossed(Wall wall)
         intersect = prevPos;
         intersect.x += beta * cos(angleOf(prevPos, getPos()));
         intersect.y += beta * sin(angleOf(prevPos, getPos()));
+
+        if (prevPos.x != getPos().x)
+        {
+            if (prevPos.x < intersect.x == intersect.x < getPos().x) //the == is a XNOR :O
+            {
+                intersectCount++;
+            }
+        }
+        else if (prevPos.y < intersect.y == intersect.y < getPos().y)
+        {
+            intersectCount++;
+        }
     }
+
+    return intersectCount % 2 == 1;
 }
 
 
