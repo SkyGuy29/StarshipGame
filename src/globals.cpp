@@ -50,3 +50,26 @@ static float angleOf(sf::Vector2f p1, sf::Vector2f p2)
 
     return theta;
 }
+
+
+//uses the law of cosines to create an angle given the three points.
+//the three points are used to create a triangle, and it finds the angle in that triangle
+//the angle returned is the one that corresponds to the first parameter/point here.
+static float lawOfCos(sf::Vector2f p1, sf::Vector2f p2, sf::Vector2f p3)
+{
+    double a, b, c;
+    a = distBetween(p1, p2);
+    b = distBetween(p1, p3);
+    c = distBetween(p2, p3);
+
+    //the law in states that (the angle opposite of c) = acos((a*a + b*b - c*c) / (2ab))
+    return acos((a * a + c * c - b * b) / (2 * a * c));
+}
+
+
+//uses the law of cosines to create an angle in a triangle given its three side lengths.
+//the angle returned is the one that is opposite of the last length given here.
+static float lawOfCos(float a, float b, float c)
+{
+    return acos((a * a + c * c - b * b) / (2 * a * c));
+}

@@ -35,6 +35,7 @@ public:
 	bool isTouching(Wall);
 	bool isTouching(Collectible);
 	bool isTouching(Goal);
+	bool hasCrossed(Wall);
 	/*
 	bool isTouching(BouncePad);
 	bool isTouching(Booster);

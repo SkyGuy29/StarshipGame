@@ -102,11 +102,8 @@ bool Player::isTouching(Wall wall)
         b = distBetween(circ.getPosition(), wall.getPoint(i));
         c = distBetween(circ.getPosition(), wall.getPoint(i + 1));
 
-        /* law of cosines to find angle
-        the law in question: angle = acos((a*a + b*b - c*c) / (2ab))
-        compare distance to readius of the circle */
-        beta = acos((a * a + c * c - b * b) / (2 * a * c));
-        gamma = acos((a * a + b * b - c * c) / (2 * a * b));
+        beta = lawOfCos(a, c, b);
+        gamma = lawOfCos(a, b, c);
 
         if ((b < circ.getRadius() || c < circ.getRadius())
             || (gamma <= PI / 2.f && beta <= PI / 2.f 
@@ -117,6 +114,26 @@ bool Player::isTouching(Wall wall)
     }
 
     return false;
+}
+
+
+bool Player::hasCrossed(Wall wall)
+{
+    float alpha = 0, beta = 0, gamma = 0;
+    sf::Vector2f intersect;
+
+    for (int i = 0; i < wall.getWallCount(); i++)
+    {
+        alpha = lawOfCos(prevPos, getPos(), wall.getPoint(i));
+        beta = lawOfCos(wall.getPoint(i), prevPos, getPos());
+        gamma = 180 - alpha - beta;
+
+        //distBetween(prevPos, INTERSECTION) 
+        beta = sin(gamma) * distBetween(prevPos, wall.getPoint(i)) / sin(beta);
+        
+        intersect.x = beta * cos(angleOf(prevPos, getPos()));
+        intersect.y = beta * sin(angleOf(prevPos, getPos()));
+    }
 }
 
 
