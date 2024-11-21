@@ -139,8 +139,9 @@ bool Player::hasCrossed(Wall wall)
         
         //setting the intersect point based on the length
         intersect = prevPos;
-        intersect.x += b * cos(angleOf(prevPos, getPos()));
-        intersect.y += b * sin(angleOf(prevPos, getPos()));
+        a = angleOf(prevPos, getPos());
+        intersect.x += b * cos(a);
+        intersect.y += b * sin(a);
 
         //intersection must be on the line, check if it is between start and end
         if (prevPos.x != getPos().x) //checking if the wall is vertical
