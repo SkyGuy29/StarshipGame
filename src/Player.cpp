@@ -20,14 +20,13 @@ void Player::update(sf::RenderWindow& window)
     //not super nessecary to put in the alive, just optimization
     if (alive && !levelWon)
     {
-        mouseMap = sf::Vector2f(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+        mouseMap = mousePos(window);
         d = mouseMap - circ.getPosition();
 
         theta = angleOf(mouseMap, circ.getPosition());
 
         //aims the spinner at the cursor
         spinner.setRotation(theta * 180 / 3.14159); //convert to degrees lol
-
 
         if (active)
         {
@@ -117,6 +116,19 @@ bool Player::isTouching(Wall wall)
 }
 
 
+bool Player::isTouching(Collectible collect)
+{
+    //gotta love how comically easy this is compared to the wall collision
+    return distBetween(collect.getPos(), getPos()) <= circ.getRadius() + collect.getRadius();
+}
+
+
+bool Player::isTouching(Goal goal)
+{
+    return distBetween(goal.getPos(), getPos()) <= circ.getRadius() + goal.getRadius();
+}
+
+
 bool Player::hasCrossed(Wall wall)
 {
     int intersectCount = 0;
@@ -160,18 +172,6 @@ bool Player::hasCrossed(Wall wall)
     return intersectCount % 2 == 1; //if the 
 }
 
-
-bool Player::isTouching(Collectible collect)
-{
-    //gotta love how comically easy this is compared to the wall collision
-    return distBetween(collect.getPos(), getPos()) <= circ.getRadius() + collect.getRadius();
-}
-
-
-bool Player::isTouching(Goal goal)
-{
-    return distBetween(goal.getPos(), getPos()) <= circ.getRadius() + goal.getRadius();
-}
 
 void Player::drawTo(sf::RenderWindow& window)
 {

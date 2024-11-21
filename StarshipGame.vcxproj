@@ -154,6 +154,7 @@
     <Image Include="resources\the_q.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="resources\levelData\level3.txt" />
     <Text Include="resources\levelData\level1.txt" />
     <Text Include="resources\levelData\level2.txt" />
     <Text Include="resources\slide math explanation.txt" />

@@ -6,12 +6,20 @@
 #define isButtonPressed sf::Mouse::isButtonPressed
 
 
-static const float PI = 3.14159;
-static const int FRAMERATE = 60;
+static const double PI = 3.1415926535897932; //mmm yummy precision
+static const int FRAMERATE = 60; //constant for now but will be able to be changed in settings
+
+
+//returns the position of the mouse relative to the window,
+//this is basically a rename since its one line of code lol
+static sf::Vector2f mousePos(sf::RenderWindow& window)
+{
+    return sf::Vector2f(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+}
 
 
 //returns a point based on an easing movement setup, as long as t increases at a constant rate
-//t MUST be between 0 and 1.
+//t MUST be between 0 and 1 for proper easing
 static sf::Vector2f easeInOut(sf::Vector2f point1, sf::Vector2f point2, float t)
 {
     sf::Vector2f d = point2 - point1;
@@ -43,9 +51,9 @@ static float angleOf(sf::Vector2f p1, sf::Vector2f p2)
         if (d.x < 0) //if its negative...
             theta += PI; //add pi to get the angles past the range of atan(), angles > pi/2
     }
-    else if (d.y < 0) //mouse ABOVE player
+    else if (d.y < 0) //exactly vertical, p1 above p2
         theta = -PI / 2;
-    else
+    else //p2 above p1 (iirc LOL)
         theta = PI / 2;
 
     return theta;
