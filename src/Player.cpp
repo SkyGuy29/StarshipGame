@@ -120,39 +120,43 @@ bool Player::isTouching(Wall wall)
 bool Player::hasCrossed(Wall wall)
 {
     int intersectCount = 0;
-    float alpha = 0, beta = 0;
+    float a = 0, b = 0;
     sf::Vector2f intersect;
 
     for (int i = 0; i < wall.getWallCount(); i++)
     {
         //finding the theoretical intersection point of the wall and the
         //line between the previous and current player positions.
-        //this math is a little crazy.
-        alpha = lawOfCos(prevPos, getPos(), wall.getPoint(i));
-        beta = lawOfCos(wall.getPoint(i), wall.getPoint(i + 1), prevPos);
-        alpha = 180 - alpha - beta;
-
-        //distBetween(prevPos, INTERSECTION) 
-        beta = sin(alpha) * distBetween(prevPos, wall.getPoint(i)) / sin(beta);
+        //this math is a little crazy and hard to follow but it works.
         
-        intersect = prevPos;
-        intersect.x += beta * cos(angleOf(prevPos, getPos()));
-        intersect.y += beta * sin(angleOf(prevPos, getPos()));
+        //getting the angles i need for the intersection (the first angle is only needed to determine the third)
+        a = lawOfCos(prevPos, getPos(), wall.getPoint(i));
+        b = lawOfCos(wall.getPoint(i), wall.getPoint(i + 1), prevPos); 
+        a = 180 - a - b; //angle opposite from the line we know
 
-        if (prevPos.x != getPos().x)
+        //law of sines to solve for the side length
+        b = sin(b) * distBetween(prevPos, wall.getPoint(i)) / sin(a); //swap sin(a) and sin(b)???
+        
+        //setting the intersect point based on the length
+        intersect = prevPos;
+        intersect.x += b * cos(angleOf(prevPos, getPos()));
+        intersect.y += b * sin(angleOf(prevPos, getPos()));
+
+        //intersection must be on the line, check if it is between start and end
+        if (prevPos.x != getPos().x) //checking if the wall is vertical
         {
-            if (prevPos.x < intersect.x == intersect.x < getPos().x) //the == is a XNOR :O
+            if ((prevPos.x < intersect.x) == (intersect.x < getPos().x)) //the == is a XNOR :O
             {
-                intersectCount++;
+                intersectCount++; //counting the total walls that the player would have crosseed through
             }
         }
-        else if (prevPos.y < intersect.y == intersect.y < getPos().y)
+        else if ((prevPos.y < intersect.y) == (intersect.y < getPos().y)) 
         {
             intersectCount++;
         }
     }
 
-    return intersectCount % 2 == 1;
+    return intersectCount % 2 == 1; //if the 
 }
 
 
