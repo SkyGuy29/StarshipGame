@@ -18,7 +18,29 @@ static sf::Vector2f mousePos(sf::RenderWindow& window)
 }
 
 
-//returns a point based on an easing movement setup, as long as t increases at a constant rate
+//returns a point based on an ease in movement setup, as long as t increases at a constant rate
+//t MUST be between 0 and 1 for proper easing
+static sf::Vector2f easeIn(sf::Vector2f point1, sf::Vector2f point2, float t)
+{
+    sf::Vector2f d = point2 - point1;
+    float ease = t * t;
+
+    return sf::Vector2f(point1.x + d.x * ease, point1.y + d.y * ease);
+}
+
+
+//returns a point based on an ease out movement setup, as long as t increases at a constant rate
+//t MUST be between 0 and 1 for proper easing
+static sf::Vector2f easeOut(sf::Vector2f point1, sf::Vector2f point2, float t)
+{
+    sf::Vector2f d = point2 - point1;
+    float ease = -t * (t - 2);
+
+    return sf::Vector2f(point1.x + d.x * ease, point1.y + d.y * ease);
+}
+
+
+//returns a point based on an ease in ease out movement setup, as long as t increases at a constant rate
 //t MUST be between 0 and 1 for proper easing
 static sf::Vector2f easeInOut(sf::Vector2f point1, sf::Vector2f point2, float t)
 {
