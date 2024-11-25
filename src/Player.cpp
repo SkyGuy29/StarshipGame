@@ -169,7 +169,7 @@ bool Player::hasCrossed(Wall wall)
         }
     }
 
-    return intersectCount % 2 == 1; //if the 
+    return intersectCount % 2 == 1; //if the count is odd it has crossed the wall
 }
 
 
