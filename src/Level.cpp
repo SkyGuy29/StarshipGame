@@ -10,11 +10,9 @@ Level::Level()
 }
 
 
-void Level::load(int levelNum)
+void Level::load(const int levelNum)
 {
-    std::string line;
-	line = "resources/levelData/level" + std::to_string(levelNum) + ".txt";
-	std::cout << line << std::endl;
+    std::string line = "resources/levelData/level" + std::to_string(levelNum) + ".txt";
 	std::ifstream file(line);
 	char currentLoad = ' ';
 
@@ -37,7 +35,7 @@ void Level::load(int levelNum)
         {
 			currentLoad = line[1];
         }
-		else if (line[0] != '/') //skips any comments like this one! no multilines tho...
+		else if (line[0] != '/') //skips any comments like this one! no multi lines tho...
 		{
 			std::istringstream iss(line); //chatgpt gave me this in full honesty, works for getting my data from the line tho
 			float x, y, id;
@@ -70,7 +68,7 @@ void Level::load(int levelNum)
 }
 
 
-ExitCondition Level::update(sf::RenderWindow& window, sf::View& view)
+ExitCondition Level::update(const sf::RenderWindow& window, sf::View& view)
 {
 	//updating player stuff (like moving) before checking collisions
 	player.update(window);
@@ -166,9 +164,9 @@ void Level::drawTo(sf::RenderWindow& window)
 {
 	window.draw(background);
 	wall.drawTo(window);
-	for (int i = 0; i < powerups.size(); i++)
+	for (const auto& powerup : powerups)
 	{
-		powerups.at(i).drawTo(window);
+		powerup.drawTo(window);
 	}
 	goal.drawTo(window);
 	player.drawTo(window);

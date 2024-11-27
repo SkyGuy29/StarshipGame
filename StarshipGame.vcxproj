@@ -134,7 +134,7 @@
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\Collectible.cpp" />
     <ClCompile Include="src\Game.cpp" />
-    <ClCompile Include="src\globals.cpp" />
+    <ClCompile Include="src\globals.hpp" />
     <ClCompile Include="src\Goal.cpp" />
     <ClCompile Include="src\Level.cpp" />
     <ClCompile Include="src\main.cpp" />

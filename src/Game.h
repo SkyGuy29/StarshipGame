@@ -23,7 +23,8 @@ public:
 private:
 	void changeMenu(Menu);
 
-	int currentLevel = 1, const BUTTONS_SIZE = 20;
+	const int BUTTONS_SIZE = 20;
+	int currentLevel = 1;
 	bool paused = false, levelComplete = false;
 
 	sf::RenderWindow window;

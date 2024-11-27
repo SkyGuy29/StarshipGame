@@ -1,5 +1,5 @@
 #pragma once
-#include "globals.cpp"
+#include "globals.hpp"
 #include <string>
 
 
@@ -7,16 +7,16 @@ class Button
 {
 public:
 	Button();
-	~Button() {};
-	void setRadius(float rad) { circ.setRadius(rad); }
+	~Button() = default;
+	void setRadius(const float rad) { circ.setRadius(rad); }
 	//changes the current center of the button to a new position
 	void setPos(sf::Vector2f);
 	//changes the string of the button
 	void setString(std::string);
 	//returns true if the cursor is on the button and the mouse was just released
-	bool isActivated(sf::RenderWindow&);
+	bool isActivated(const sf::RenderWindow&);
 	//draws the button to a given window
-	void drawTo(sf::RenderWindow&);
+	void drawTo(sf::RenderWindow&) const ;
 private:
 	bool mousePressed = false;
 

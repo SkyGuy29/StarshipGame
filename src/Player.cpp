@@ -12,88 +12,84 @@ Player::Player()
 }
 
 
-void Player::update(sf::RenderWindow& window)
+void Player::update(const sf::RenderWindow& window)
 {
-    float theta; //angle between mouse and player, different than the angle member which is used for velocity
-    sf::Vector2f mouseMap, d;
+    //just optimization
+    if (!alive || levelWon)
+	    return;
 
-    //not super nessecary to put in the alive, just optimization
-    if (alive && !levelWon)
+	const sf::Vector2f mouseMap = mousePos(window), d = mouseMap - circ.getPosition();
+
+    const float theta = angleOf(mouseMap, circ.getPosition());  //angle between mouse and player, different from the angle member which is used for velocity
+
+    //aims the spinner at the cursor
+    spinner.setRotation(theta * 180 / PI); //convert to degrees lol
+
+    if (active)
     {
-        mouseMap = mousePos(window);
-        d = mouseMap - circ.getPosition();
+	    //changes movement based on the current mode
+	    if (slideMode)
+	    {
+		    if (!isButtonPressed(sf::Mouse::Left) && mousePressed)
+		    {
+			    if (warpActive)
+			    {
+				    circ.setPosition(mouseMap);
+				    //instantly warp player and have view catch up (fast, slide math for easing????????)
+				    warpActive = false;
+			    }
+			    else
+			    {
+				    vel.x = d.x / ((FRAMERATE + 1) / 2.f); //okay I don't like magic code, but I actually do not know the explanation
+				    vel.y = d.y / ((FRAMERATE + 1) / 2.f); //also this is the only case where it makes more sense to directly set vel than use angle and magnitude
+				    frictionVel = vel;
+			    }
+		    }
+	    }
+	    else
+	    {
+		    angle = theta; //will now move player toward the mouse
+		    magnitude = 10; //at a constant speed
+		    updateVelocity();
 
-        theta = angleOf(mouseMap, circ.getPosition());
+		    if (warpActive && !isButtonPressed(sf::Mouse::Left) && mousePressed)
+		    {
+			    circ.setPosition(mouseMap);
+			    //instantly warp player and have view catch up (fast, slide math for easing????????)
+			    warpActive = false;
+		    }
 
-        //aims the spinner at the cursor
-        spinner.setRotation(theta * 180 / 3.14159); //convert to degrees lol
-
-        if (active)
-        {
-            //changes movement based on the current mode
-            if (slideMode)
-            {
-                if (!isButtonPressed(sf::Mouse::Left) && mousePressed)
-                {
-                    if (warpActive)
-                    {
-                        circ.setPosition(mouseMap);
-                        //instantly warp player and have view catch up (fast, slide math for easing????????)
-                        warpActive = false;
-                    }
-                    else
-                    {
-                        vel.x = d.x / ((FRAMERATE + 1) / 2.f); //okay i dont like magic code but i actually do not know the explanation
-                        vel.y = d.y / ((FRAMERATE + 1) / 2.f); //also this is the only case where it makes more sense to directly set vel than use angle and magnitude
-                        frictionVel = vel;
-                    }
-                }
-            }
-            else
-            {
-                angle = theta; //will now move player toward the mouse
-                magnitude = 10; //at a constant speed
-                updateVelocity();
-
-                if (warpActive && !isButtonPressed(sf::Mouse::Left) && mousePressed)
-                {
-                    circ.setPosition(mouseMap);
-                    //instantly warp player and have view catch up (fast, slide math for easing????????)
-                    warpActive = false;
-                }
-
-                if (boostTimer.getElapsedTime().asMilliseconds() >= 2000)
-                {
-                    slideMode = true;
-                }
-            }
+		    if (boostTimer.getElapsedTime().asMilliseconds() >= 2000)
+		    {
+			    slideMode = true;
+		    }
+	    }
 
 
-            //used for checking when a release has happened
-            if (isButtonPressed(sf::Mouse::Left))
-                mousePressed = true;
-            else
-                mousePressed = false;
-        }
-            
-        prevPos = circ.getPosition();
-
-        //moves the player if it has velocity
-        if (vel.x != 0 && vel.y != 0)
-        {
-            circ.setPosition(circ.getPosition() + vel);
-            if (slideMode)
-                decelerate();
-        }
-
-        spinner.setPosition(circ.getPosition());
+	    //used for checking when a release has happened
+	    if (isButtonPressed(sf::Mouse::Left))
+		    mousePressed = true;
+	    else
+		    mousePressed = false;
     }
+            
+    prevPos = circ.getPosition();
+
+    //moves the player if it has velocity
+    if (vel.x != 0 && vel.y != 0)
+    {
+	    circ.setPosition(circ.getPosition() + vel);
+	    if (slideMode)
+		    decelerate();
+    }
+
+    spinner.setPosition(circ.getPosition());
 }
 
 
-bool Player::isTouching(Wall wall)
+bool Player::isTouching(const Wall& wall) const 
 {
-    double a, b, c, beta, gamma;
+    float a = 0, b = 0, c = 0, beta = 0, gamma = 0;
 
     for (int i = 0; i < wall.getWallCount(); i++)
     {
@@ -116,35 +112,35 @@ bool Player::isTouching(Wall wall)
 }
 
 
-bool Player::isTouching(Collectible collect)
+bool Player::isTouching(const Collectible& collect) const 
 {
     //gotta love how comically easy this is compared to the wall collision
     return distBetween(collect.getPos(), getPos()) <= circ.getRadius() + collect.getRadius();
 }
 
 
-bool Player::isTouching(Goal goal)
+bool Player::isTouching(const Goal& goal) const 
 {
     return distBetween(goal.getPos(), getPos()) <= circ.getRadius() + goal.getRadius();
 }
 
 
-bool Player::hasCrossed(Wall wall)
+bool Player::hasCrossed(const Wall& wall) const
 {
     int intersectCount = 0;
     float a = 0, b = 0;
-    sf::Vector2f intersect;
+    sf::Vector2f intersect = prevPos;
 
     for (int i = 0; i < wall.getWallCount(); i++)
     {
         //finding the theoretical intersection point of the wall and the
         //line between the previous and current player positions.
-        //this math is a little crazy and hard to follow but it works.
+        //this math is a little crazy and hard to follow, but it works.
         
-        //getting the angles i need for the intersection (the first angle is only needed to determine the third)
+        //getting the angles I need for the intersection (the first angle is only needed to determine the third)
         a = lawOfCos(prevPos, getPos(), wall.getPoint(i));
         b = lawOfCos(wall.getPoint(i), wall.getPoint(i + 1), prevPos); 
-        a = 180 - a - b; //angle opposite from the line we know
+        a = 180 - a - b; //angle opposite to the line we know
 
         //law of sines to solve for the side length
         b = sin(b) * distBetween(prevPos, wall.getPoint(i)) / sin(a); //swap sin(a) and sin(b)???
@@ -158,9 +154,9 @@ bool Player::hasCrossed(Wall wall)
         //intersection must be on the line, check if it is between start and end
         if (prevPos.x != getPos().x) //checking if the wall is vertical
         {
-            if ((prevPos.x < intersect.x) == (intersect.x < getPos().x)) //the == is a XNOR :O
+            if ((prevPos.x < intersect.x) == (intersect.x < getPos().x))
             {
-                intersectCount++; //counting the total walls that the player would have crosseed through
+                intersectCount++; //counting the total walls that the player would have crossed through
             }
         }
         else if ((prevPos.y < intersect.y) == (intersect.y < getPos().y)) 
@@ -173,7 +169,7 @@ bool Player::hasCrossed(Wall wall)
 }
 
 
-void Player::drawTo(sf::RenderWindow& window)
+void Player::drawTo(sf::RenderWindow& window) const 
 {
     if (alive)
     {

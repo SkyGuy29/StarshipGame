@@ -4,7 +4,7 @@
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\Collectible.cpp" />
     <ClCompile Include="src\Game.cpp" />
-    <ClCompile Include="src\globals.cpp" />
+    <ClCompile Include="src\globals.hpp" />
     <ClCompile Include="src\Goal.cpp" />
     <ClCompile Include="src\Level.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -27,6 +27,7 @@
     <Text Include="resources\levelData\level1.txt" />
     <Text Include="resources\levelData\level2.txt" />
     <Text Include="resources\slide math explanation.txt" />
+    <Text Include="resources\levelData\level3.txt" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="resources\pusab.otf" />

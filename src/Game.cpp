@@ -50,7 +50,7 @@ void Game::run()
                 overlay.setPosition(view.getCenter());
                 for (int i = 0; i < 3; i++)
                 {
-                    buttons[i].setPos(sf::Vector2f(view.getCenter().x + 350 * (i - 1), view.getCenter().y));
+                    buttons[i].setPos(sf::Vector2f(view.getCenter().x + 350.f * (i - 1.f), view.getCenter().y));
                     switch (i)
                     {
                     case 0:
@@ -61,6 +61,8 @@ void Game::run()
                         break;
                     case 2:
                         buttons[i].setString("Options");
+                        break;
+					default:
                         break;
                     }
                 }
@@ -76,12 +78,12 @@ void Game::run()
                         switch (i)
                         {
                         case 0:
-                            changeMenu(Menu::START); //break shennanigains lol
+                            changeMenu(Menu::START); //break shenanigans lol
                         case 1:
                             paused = false;
                             break;
                         case 2:
-                            //changeMenu(Menu::SETTINGS) //actually this wouldnt make sense since you are still in level
+                            //changeMenu(Menu::SETTINGS) //actually this wouldn't make sense since you are still in level
                             //we need another overlay
                             break;
                         }
@@ -136,6 +138,8 @@ void Game::run()
                         case 2:
                             buttons[i].setString("Menu");
                             break;
+                        default:
+                            break;
                         }
                     }
                     break;
@@ -186,7 +190,7 @@ void Game::run()
 }
 
 
-void Game::changeMenu(Menu newMenu)
+void Game::changeMenu(const Menu newMenu)
 {
     currentMenu = newMenu;
 
@@ -199,7 +203,7 @@ void Game::changeMenu(Menu newMenu)
         view.setCenter(0, 0);
         break;
     case Menu::SELECT:
-        //set all of the level button positions
+        //set all the level button positions
         break;
     case Menu::SETTINGS:
         //multiple tabs (buttons)

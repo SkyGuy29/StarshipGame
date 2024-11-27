@@ -16,14 +16,14 @@ Button::Button()
 }
 
 
-void Button::setPos(sf::Vector2f newPos)
+void Button::setPos(const sf::Vector2f newPos)
 {
 	circ.setPosition(newPos);
 	text.setPosition(newPos);
 }
 
 
-void Button::setString(std::string newString)
+void Button::setString(const std::string newString)
 {
 	text.setString(newString);	
 	text.setOrigin(text.getLocalBounds().width / 2.f, text.getLocalBounds().height / 2.f);
@@ -31,9 +31,9 @@ void Button::setString(std::string newString)
 }
 
 
-bool Button::isActivated(sf::RenderWindow& window)
+bool Button::isActivated(const sf::RenderWindow& window)
 {
-	//if mouse is inside of the circle
+	//if mouse is inside the circle
 	if (distBetween(sf::Vector2f(window.mapPixelToCoords(sf::Mouse::getPosition(window))),
 		circ.getPosition()) < circ.getRadius())
 	{
@@ -57,7 +57,7 @@ bool Button::isActivated(sf::RenderWindow& window)
 }
 
 
-void Button::drawTo(sf::RenderWindow& window)
+void Button::drawTo(sf::RenderWindow& window) const
 {
 	window.draw(circ);
 	window.draw(text);

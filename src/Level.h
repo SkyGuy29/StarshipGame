@@ -17,12 +17,12 @@ class Level
 {
 public:
 	Level();
-	~Level() {};
+	~Level() = default;
 	//loads a given level from the id given and the corresponding text file.
 	void load(int);
-	//handles most of the actual level gameplay, updating all of the things going on inside of the level
-	ExitCondition update(sf::RenderWindow&, sf::View&);
-	//draws all of the level's contents to the window
+	//handles most of the actual level gameplay, updating all the things going on inside the level
+	ExitCondition update(const sf::RenderWindow&, sf::View&);
+	//draws all the level's contents to the window
 	void drawTo(sf::RenderWindow&);
 private:
 	bool levelWon = false;
@@ -32,7 +32,7 @@ private:
 	sf::Clock timer;
 	sf::Vector2f viewSlideStart; //used for death reset
 	Player player;
-	Wall wall; //maybe be a vector later if i need multiple walls like this
+	Wall wall; //maybe be a vector later if I need multiple walls like this
 	std::vector<Collectible> powerups;
 	Goal goal;
 };
